@@ -1,10 +1,6 @@
 from manimlib.imports import *
 import numpy
 
-class Gittrying() :
-    pass
-    #just add something to see what will happen
-
 class Underline(Scene) :
     def construct(self) :
         greet = TextMobject("HELLO", "WORLD")
