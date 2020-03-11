@@ -15,6 +15,7 @@ class Try_debug_tex(Scene) :
     def construct(self) :
         f = TexMobject("f(x)=ax^3+bx^2+cx+d").scale(1.5)
         self.play(ShowCreation(f))
+        self.play(f.scale, 1.5)
         show_tex_tag(self, f)
         col = [
             (x, RED) for x in [5, 9, 13, 16]
