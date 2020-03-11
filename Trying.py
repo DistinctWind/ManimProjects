@@ -27,7 +27,7 @@ class Test_vgroup_square(Scene) :
         mov_y = (0, 1, 0, -1)
         cnt = 0
         sp = []
-        text = TextMobject("cnt="+str(cnt)).set_color(GREEN)
+        text = TextMobject("cnt="+str(cnt)).set_color(GREEN).to_corner(UL)
         text.move_to(UL)
         self.play(Write(text))
         def show_path(self) :
@@ -41,13 +41,13 @@ class Test_vgroup_square(Scene) :
             if cnt == 1 :
                 self.play(ShowCreation(p))
                 sp.append(p)
-                text.target=TextMobject("cnt="+str(cnt)).set_color(GREEN)
+                text.target=TextMobject("cnt="+str(cnt)).set_color(GREEN).to_corner(UL)
                 self.play(MoveToTarget(text))
                 self.wait(3)
             else :
                 self.remove(sp[0])
                 self.add(p)
-                text.target=TextMobject("cnt="+str(cnt)).set_color(GREEN)
+                text.target=TextMobject("cnt="+str(cnt)).set_color(GREEN).to_corner(UL)
                 self.play(MoveToTarget(text), run_time=0.1)
                 sp[0]=p
         def dfs(x, y) :
@@ -70,7 +70,6 @@ class Test_vgroup_square(Scene) :
                     path.pop()
             vis.pop()
         dfs(0,0)
-        self.play(Write(TextMobject(str(cnt)).to_corner(UL)))
         self.wait()
 
 
