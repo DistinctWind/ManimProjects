@@ -1,5 +1,6 @@
 from manimlib.imports import *
 import numpy
+import math
 
 def show_tex_tag(self, tex) :
     for i, j in zip(range(100), tex[0]) :
@@ -10,6 +11,23 @@ def show_tex_tag(self, tex) :
 def set_tex_color(tex, *settings) :
     for tag, color in settings :
         tex[0][tag].set_color(color)
+
+class MoveFrameBox(Scene) :
+    def construct(self) :
+        text = TexMobject(
+            "\\frac{d}{dx}f(x)g(x)=","f(x)\\frac{d}{dx}g(x)","+",
+            "g(x)\\frac{d}{dx}f(x)"
+        )
+        self.play(Write(text))
+        framebox1 = SurroundingRectangle(text[1], buff=0.1)
+        framebox2 = SurroundingRectangle(text[3], buff=0.1)
+        self.play(ShowCreation(framebox1))
+        self.wait()
+        self.play(
+            ReplacementTransform(framebox1.copy(), framebox2),
+            path_arc=-math.pi
+        )
+        self.wait()
 
 class Try_debug_tex(Scene) :
     def construct(self) :
@@ -148,29 +166,6 @@ class Shoot(Scene) :
         shoot(2,0)
         shoot(0,3)
         
-        
-
-class Function_t(Scene) :
-    CONFIG = {
-        "axis_config": {
-            "include_ticks": True,
-            "include_tip": True,
-        },
-        "x_line_frequency": 2,
-    }
-    def f(self, x) :
-        return 2**x
-    def construct(self) :
-        tip = TextMobject("$f(x)=a^x$")
-        tip.to_corner(UL)
-        plane = NumberPlane()
-        
-        graph = plane.get_graph(self.f)
-        
-        self.play(ShowCreation(plane))
-        self.wait()
-        self.play(ShowCreation(graph))
-        self.wait(3)
 
 class Basic_shape(GraphScene) :
     def construct(self) :
