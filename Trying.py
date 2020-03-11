@@ -27,25 +27,35 @@ class Test_vgroup_square(Scene) :
         mov_y = (0, 1, 0, -1)
         cnt = 0
         sp = []
+        text = TextMobject("cnt="+str(cnt)).set_color(GREEN)
+        text.move_to(UL)
+        self.play(Write(text))
         def show_path(self) :
             nonlocal cnt, sp
+            cnt += 1
             p = VGroup(
                 *[Line(f[begin[0]][begin[1]].get_center(), f[end[0]][end[1]].get_center()).set_color(GREEN)
                     for begin, end in path
                 ]
             )
-            if cnt == 0 :
+            if cnt == 1 :
                 self.play(ShowCreation(p))
                 sp.append(p)
+                text.target=TextMobject("cnt="+str(cnt)).set_color(GREEN)
+                self.play(MoveToTarget(text))
+                self.wait(3)
             else :
-                self.play(Transform(sp[0], p))
-            cnt += 1
+                self.remove(sp[0])
+                self.add(p)
+                text.target=TextMobject("cnt="+str(cnt)).set_color(GREEN)
+                self.play(MoveToTarget(text), run_time=0.1)
+                sp[0]=p
         def dfs(x, y) :
             nonlocal path, vis, cnt
             vis.append((x,y))
             for i in range(4) :
-                if cnt > 10 :
-                    return
+                #if cnt > 10 :
+                    #return
                 now_x = x + mov_x[i]
                 now_y = y + mov_y[i]
                 if (now_x, now_y) in vis :
@@ -54,11 +64,14 @@ class Test_vgroup_square(Scene) :
                     path.append(((x, y), (now_x, now_y)))
                     if now_x==2 and now_y==4 :
                         show_path(self)
+                        #cnt += 1
                     else :
                         dfs(now_x, now_y)
                     path.pop()
             vis.pop()
         dfs(0,0)
+        self.play(Write(TextMobject(str(cnt)).to_corner(UL)))
+        self.wait()
 
 
 class Test_vgroup(Scene) :
