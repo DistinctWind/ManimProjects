@@ -12,6 +12,14 @@ def set_tex_color(tex, *settings) :
     for tag, color in settings :
         tex[0][tag].set_color(color)
 
+class Test_vgroup(Scene) :
+    def construct(self) :
+        v = VGroup(*[TextMobject(str(x)) for x in range(5)]).arrange(RIGHT)
+        self.play(Write(v))
+        self.wait()
+        self.play(v[2].set_color, RED, run_time=3)
+        self.wait()
+
 class MoveFrameBox(Scene) :
     def construct(self) :
         text = TexMobject(
@@ -88,7 +96,7 @@ class ColorByCaracter(Scene):
 		text = TexMobject("{d","\\over","d","x}","\\int^","x_","a","f(","t",")d","t","=","f(","x",")")
 		text.set_color_by_tex("x",RED)
 		self.play(Write(text))
-		self.wait(2)
+		self.wait()
 
 class Sizes(Scene) :
     def construct(self) :
