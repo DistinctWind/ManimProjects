@@ -1,6 +1,18 @@
 from manimlib.imports import *
 import numpy
 
+def show_tex_tag(self, tex) :
+        for i, j in zip(range(100), tex[0]) :
+            tex_id = TextMobject(str(i)).scale(0.3).set_color(BLUE)
+            tex_id.next_to(j, DOWN, buff=0.3)
+            self.add(tex_id)
+
+class Try_debug_tex(Scene) :
+    def construct(self) :
+        f = TexMobject("f(x)=ax^3+bx^2+cx+d").scale(1.5)
+        self.play(ShowCreation(f))
+        show_tex_tag(self, f)
+
 class Underline(Scene) :
     def construct(self) :
         greet = TextMobject("HELLO", "WORLD")
