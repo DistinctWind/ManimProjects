@@ -2,15 +2,64 @@ from manimlib.imports import *
 import numpy
 import math
 
-def show_tex_tag(self, tex) :
-    for i, j in zip(range(100), tex[0]) :
-        tex_id = TextMobject(str(i)).scale(0.3).set_color(BLUE)
-        tex_id.next_to(j, DOWN, buff=0.3)
-        self.add(tex_id)
 
-def set_tex_color(tex, *settings) :
-    for tag, color in settings :
-        tex[0][tag].set_color(color)
+class Test_vgroup_square(Scene) :
+    def construct(self) :
+        g = VGroup(
+            *[Square().scale(0.3) for x in range(5)]
+        ).arrange(RIGHT, buff=0)
+        f = VGroup(
+            *[VGroup(
+                *[Square().scale(0.5) for x in range(5)]
+            ).arrange(RIGHT, buff=0) for y in range(3)]
+        ).arrange(DOWN, buff=0)
+        self.add(f)
+        s = TextMobject('S').scale(1.25).set_color(GREEN).set_opacity(0.5)
+        s.move_to(f[0][0].get_center())
+        t = TextMobject('T').scale(1.25).set_color(RED).set_opacity(0.5)
+        t.move_to(f[2][4].get_center())
+        self.play(Write(s), Write(t))
+        self.wait()
+
+        path = []
+        vis = []
+        mov_x = (-1, 0, 1, 0)
+        mov_y = (0, 1, 0, -1)
+        cnt = 0
+        sp = []
+        def show_path(self) :
+            nonlocal cnt, sp
+            p = VGroup(
+                *[Line(f[begin[0]][begin[1]].get_center(), f[end[0]][end[1]].get_center()).set_color(GREEN)
+                    for begin, end in path
+                ]
+            )
+            if cnt == 0 :
+                self.play(ShowCreation(p))
+                sp.append(p)
+            else :
+                self.play(Transform(sp[0], p))
+            cnt += 1
+        def dfs(x, y) :
+            nonlocal path, vis, cnt
+            vis.append((x,y))
+            for i in range(4) :
+                if cnt > 10 :
+                    return
+                now_x = x + mov_x[i]
+                now_y = y + mov_y[i]
+                if (now_x, now_y) in vis :
+                    continue
+                if 0<=now_x<=2 and 0<=now_y<=4 :
+                    path.append(((x, y), (now_x, now_y)))
+                    if now_x==2 and now_y==4 :
+                        show_path(self)
+                    else :
+                        dfs(now_x, now_y)
+                    path.pop()
+            vis.pop()
+        dfs(0,0)
+
 
 class Test_vgroup(Scene) :
     def construct(self) :
@@ -36,19 +85,6 @@ class MoveFrameBox(Scene) :
             path_arc=-math.pi
         )
         self.wait()
-
-class Try_debug_tex(Scene) :
-    def construct(self) :
-        f = TexMobject("f(x)=ax^3+bx^2+cx+d").scale(1.5)
-        self.play(ShowCreation(f))
-        self.play(f.scale, 1.5)
-        show_tex_tag(self, f)
-        col = [
-            (x, RED) for x in [5, 9, 13, 16]
-        ] + [
-            (x, PURPLE) for x in [7, 11]
-        ]
-        set_tex_color(f, *col)
 
 class Underline(Scene) :
     def construct(self) :
