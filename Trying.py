@@ -2,16 +2,26 @@ from manimlib.imports import *
 import numpy
 
 def show_tex_tag(self, tex) :
-        for i, j in zip(range(100), tex[0]) :
-            tex_id = TextMobject(str(i)).scale(0.3).set_color(BLUE)
-            tex_id.next_to(j, DOWN, buff=0.3)
-            self.add(tex_id)
+    for i, j in zip(range(100), tex[0]) :
+        tex_id = TextMobject(str(i)).scale(0.3).set_color(BLUE)
+        tex_id.next_to(j, DOWN, buff=0.3)
+        self.add(tex_id)
+
+def set_tex_color(tex, *settings) :
+    for tag, color in settings :
+        tex[0][tag].set_color(color)
 
 class Try_debug_tex(Scene) :
     def construct(self) :
         f = TexMobject("f(x)=ax^3+bx^2+cx+d").scale(1.5)
         self.play(ShowCreation(f))
         show_tex_tag(self, f)
+        col = [
+            (x, RED) for x in [5, 9, 13, 16]
+        ] + [
+            (x, PURPLE) for x in [7, 11]
+        ]
+        set_tex_color(f, *col)
 
 class Underline(Scene) :
     def construct(self) :
