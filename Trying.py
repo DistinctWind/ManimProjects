@@ -28,7 +28,6 @@ class Test_vgroup_square(Scene) :
         cnt = 0
         sp = []
         text = TextMobject("cnt="+str(cnt)).set_color(GREEN).to_corner(UL)
-        text.move_to(UL)
         self.play(Write(text))
         def show_path(self) :
             nonlocal cnt, sp
