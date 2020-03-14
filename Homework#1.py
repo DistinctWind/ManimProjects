@@ -51,14 +51,22 @@ class Main(Scene) :
         self.add(tri1, s1)
 
         tri2 = Polygon(array([3.73,2,0]), array([2,-3,0]), array([2,0,0]))
-        tri2.set_fill(BLUE_A)
+        tri2.set_fill(BLUE_B)
         tri2.set_opacity(0.5)
         s2 = TexMobject("S_2").move_to(tri2.get_center()).scale(1.25)
         self.add(tri2, s2)
 
         tri3 = Polygon(array([-1,-3,0]), array([-2.73,1,0]), array([-1,0,0]))
-        tri3.set_fill(BLUE_A)
+        tri3.set_fill(BLUE_E)
         tri3.set_opacity(0.5)
         s3 = TexMobject("S_3").move_to(tri3.get_center()).scale(1.25)
         self.add(tri3, s3)
+
+        self.remove(rec1, rec2, rec3)
+
+        
+        tri1.rotate(PI/2, about_point=array([0,math.sqrt(3),0]))
+        tri2.rotate(PI/2, about_point=array([2,0,0]))
+        tri3.rotate(PI/2, about_point=array([-1,0,0]))
+
         self.wait(2)
