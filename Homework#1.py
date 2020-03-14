@@ -27,7 +27,8 @@ class Main(Scene) :
         c_text = TextMobject("c")
         c_text.move_to(array([0.5,-0.3,0]))
         Tri = VGroup(tri, a_text, b_text, c_text)
-        self.add(Tri)
+        self.play(ShowCreation(tri), *[Write(text) for text in [a_text, b_text, c_text]])
+        self.wait()
 
         rec1 = Polygon(array([-1,0,0]), array([-1,-3,0]), array([2,-3,0]), array([2,0,0]))
         rec1.set_color(GREEN)
@@ -42,31 +43,44 @@ class Main(Scene) :
         rec3.set_fill(GREEN)
         rec3.set_opacity(0.5)
         Recs = VGroup(rec1, rec2, rec3)
-        self.add(Recs)
+        self.play(ShowCreation(Recs))
+        self.wait()
 
         tri1 = Polygon(array([-1.73,2.73,0]), array([1.73,3.73,0]), array([0,1.73,0]))
         tri1.set_fill(BLUE_A)
         tri1.set_opacity(0.5)
         s1 = TexMobject("S_1").move_to(tri1.get_center()).scale(1.25)
-        self.add(tri1, s1)
 
         tri2 = Polygon(array([3.73,2,0]), array([2,-3,0]), array([2,0,0]))
         tri2.set_fill(BLUE_B)
         tri2.set_opacity(0.5)
         s2 = TexMobject("S_2").move_to(tri2.get_center()).scale(1.25)
-        self.add(tri2, s2)
 
         tri3 = Polygon(array([-1,-3,0]), array([-2.73,1,0]), array([-1,0,0]))
         tri3.set_fill(BLUE_E)
         tri3.set_opacity(0.5)
         s3 = TexMobject("S_3").move_to(tri3.get_center()).scale(1.25)
-        self.add(tri3, s3)
 
-        self.remove(rec1, rec2, rec3)
+        self.play(*[ShowCreation(t) for t in [tri1, tri2, tri3]])
+        self.play(*[Write(t) for t in [s1, s2, s3]])
+        self.wait()
+        self.play(*[FadeOut(r) for r in [rec1, rec2, rec3]])
+        self.wait()
 
-        
-        tri1.rotate(PI/2, about_point=array([0,math.sqrt(3),0]))
-        tri2.rotate(PI/2, about_point=array([2,0,0]))
-        tri3.rotate(PI/2, about_point=array([-1,0,0]))
+        self.play(
+            ApplyMethod(tri1.rotate, PI/2, {"about_point": array([0,math.sqrt(3),0])}),
+            ApplyMethod(tri2.rotate, PI/2, {"about_point": array([2,0,0])}),
+            ApplyMethod(tri3.rotate, PI/2, {"about_point": array([-1,0,0])}),
+        )
+        #tri1.rotate(PI/2, about_point=array([0,math.sqrt(3),0]))
+        #tri2.rotate(PI/2, about_point=array([2,0,0]))
+        #tri3.rotate(PI/2, about_point=array([-1,0,0]))
+        self.play(
+            *[ApplyMethod(mtext.move_to, mtri.get_center()) for mtext,mtri in [(a_text,tri1), (b_text,tri2), (c_text,tri3)]]
+        )
+        self.wait()
+
+        s = TexMobject("S").move_to(tri.get_center()).scale(1.5)
+        self.play(Write(s))
 
         self.wait(2)
