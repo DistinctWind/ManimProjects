@@ -83,4 +83,30 @@ class Main(Scene) :
         s = TexMobject("S").move_to(tri.get_center()).scale(1.5)
         self.play(Write(s))
 
+        self.play(
+            ReplacementTransform(tri1, tri),
+            ReplacementTransform(s1, s),
+        )
+        self.wait(0.5)
+        self.play(
+            ReplacementTransform(tri2, tri),
+            ReplacementTransform(s2, s),
+        )
+        self.wait(0.5)
+        self.play(
+            ReplacementTransform(tri3, tri),
+            ReplacementTransform(s3, s),
+        )
+        self.wait(0.5)
+
+        self.play(*[FadeOut(mtext) for mtext in [a_text, b_text, c_text]])
+        self.wait(0.5)
+
+        Tri = VGroup(tri, s)
+        self.play(ApplyMethod(Tri.shift, UP))
+        self.wait()
+
+        conclution = TexMobject("S_1=S_2=S_3").next_to(tri, DOWN)
+        self.play(ReplacementTransform(s, conclution))
+
         self.wait(2)
