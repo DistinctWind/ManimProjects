@@ -1,13 +1,64 @@
 from manimlib.imports import *
-import numpy
+from numpy import *
 import math
 
 class BeginScene(Scene) :
     def construct(self) :
-        title = Text("Manim Homework Vol.1", font='calibri')
-        author = Text("Made by @DistinctWind", font='calibri').scale(0.5)
+        title = Text("Manim Homework Vol.1", font='msyh', stroke_width=0)
+        author = Text("Made by @DistinctWind", font='msyh', stroke_width=0).scale(0.5)
         title.move_to(UP*0.5)
         author.move_to(DOWN*0.5)
         self.play(Write(title))
         self.play(Write(author))
+        self.wait(2)
+
+class Main(Scene) :
+    def construct(self) :
+        plane = NumberPlane().set_color(WHITE)
+        self.add(plane)
+
+        tri = Polygon(array([-1,0,0]), array([2,0,0]), array([0,math.sqrt(3),0]))
+        tri.set_fill(BLUE)
+        tri.set_opacity(0.5)
+        a_text = TextMobject("a")
+        a_text.move_to(array([-0.75,1,0]))
+        b_text = TextMobject("b")
+        b_text.move_to(array([1.1,1.2,0]))
+        c_text = TextMobject("c")
+        c_text.move_to(array([0.5,-0.3,0]))
+        Tri = VGroup(tri, a_text, b_text, c_text)
+        self.add(Tri)
+
+        rec1 = Polygon(array([-1,0,0]), array([-1,-3,0]), array([2,-3,0]), array([2,0,0]))
+        rec1.set_color(GREEN)
+        rec1.set_fill(GREEN)
+        rec1.set_opacity(0.5)
+        rec2 = Polygon(array([-1,0,0]), array([0,math.sqrt(3),0]), array([-1.73,2.73,0]), array([-2.73,1,0]))
+        rec2.set_color(GREEN)
+        rec2.set_fill(GREEN)
+        rec2.set_opacity(0.5)
+        rec3 = Polygon(array([0,1.73,0]),array([2,0,0]),array([3.73,2,0]),array([1.73,3.73,0]))
+        rec3.set_color(GREEN)
+        rec3.set_fill(GREEN)
+        rec3.set_opacity(0.5)
+        Recs = VGroup(rec1, rec2, rec3)
+        self.add(Recs)
+
+        tri1 = Polygon(array([-1.73,2.73,0]), array([1.73,3.73,0]), array([0,1.73,0]))
+        tri1.set_fill(BLUE_A)
+        tri1.set_opacity(0.5)
+        s1 = TexMobject("S_1").move_to(tri1.get_center()).scale(1.25)
+        self.add(tri1, s1)
+
+        tri2 = Polygon(array([3.73,2,0]), array([2,-3,0]), array([2,0,0]))
+        tri2.set_fill(BLUE_A)
+        tri2.set_opacity(0.5)
+        s2 = TexMobject("S_2").move_to(tri2.get_center()).scale(1.25)
+        self.add(tri2, s2)
+
+        tri3 = Polygon(array([-1,-3,0]), array([-2.73,1,0]), array([-1,0,0]))
+        tri3.set_fill(BLUE_A)
+        tri3.set_opacity(0.5)
+        s3 = TexMobject("S_3").move_to(tri3.get_center()).scale(1.25)
+        self.add(tri3, s3)
         self.wait(2)
