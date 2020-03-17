@@ -2,6 +2,9 @@ from manimlib.imports import *
 import numpy
 import math
 
+class Dtest(ThreeDScene) :
+    def construct(self) :
+        pass
 
 class Test_vgroup_square(Scene) :
     def construct(self) :
