@@ -1,7 +1,7 @@
 from manimlib.imports import *
 import numpy
 import math
-
+#try
 class color_text(Scene) :
     def construct(self) :
         text = TextMobject('text')
