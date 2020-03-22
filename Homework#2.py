@@ -158,5 +158,83 @@ class main(Scene) :
                     lines[i][0].get_corner(UL)+UL*0.3,
                 )
             )
-        for i, sur in zip(range(5), polygon_list) :
-            self.add(sur)
+        
+        cor_sum_list = [
+            TexMobject('1').next_to(lines[0][4], buff=4.25),
+            TexMobject('2\\times 2(1)+2^2'),
+            TexMobject('2\\times 3(1+2)+3^2'),
+            TexMobject('\\vdots'),
+            TexMobject('2\\times n\\left[ 1+2+\\cdots +(n-1) \\right] +n^2'),
+        ]
+        for i in range(1, 5):
+            cor_sum_list[i].move_to(cor_sum_list[i-1].get_center()+DOWN)
+        for i, f, pol in zip(range(5), cor_sum_list, polygon_list) :
+            self.play(ShowCreation(pol))
+            self.wait()
+            self.play(ReplacementTransform(pol, f))
+            self.wait()
+        c = cor_sum_list[4]
+        c_target_list = [
+            TexMobject('2\\times n \\dfrac{\\left[1+(n-1) \\right] (n-1)}{2}+n^2'),
+            TexMobject('2\\times n \\dfrac{n(n-1)}{2}+n^2'),
+            TexMobject('n^2(n-1)+n^2'),
+            TexMobject('n^3-n^2+n^2'),
+            TexMobject('n^3'),
+        ]
+        for item in c_target_list :
+            item.move_to(c.get_center())
+        self.wait()
+        for t in c_target_list :
+            c.target = t
+            self.play(MoveToTarget(c))
+            self.wait(2)
+        cor_sum_target_list = [
+            TexMobject(str(x)+'^3').move_to(cor_sum_list[x-1].get_center()) for x in range(1,4)
+        ]
+        for i, t in zip(range(3), cor_sum_target_list) :
+            cor_sum_list[i].target = t
+        self.wait()
+        self.play(
+            *[MoveToTarget(x) for x in [cor_sum_list[y] for y in range(3)] ]
+        )
+        self.wait()
+        
+        s = SurroundingRectangle(
+            VGroup(
+                *[f for f in cor_sum_list]
+            )
+        ).set_color(BLUE)
+        self.play(ShowCreation(s))
+
+        r_formala = TexMobject('1^3+2^3+3^3+\\cdots +n^3').to_edge(DOWN).shift(UP*0.5)
+        r_formala.target=TexMobject('\\sum^n_{i=1}i^3').to_edge(DOWN).shift(UP*0.5)
+        self.wait(2)
+        self.play(ReplacementTransform(s, r_formala))
+        self.wait(2)
+        self.play(MoveToTarget(r_formala))
+
+        equal.next_to(formala, RIGHT, buff=0.5)
+        r_formala.target = r_formala.copy().next_to(equal, buff=0.5)
+        self.play(
+            FadeIn(equal),
+            MoveToTarget(r_formala)
+        )
+        self.wait(2)
+        formala_group = VGroup(formala, equal, r_formala)
+
+        self.play(
+            ApplyMethod(formala_group.move_to, ORIGIN),
+            FadeOut(all),
+            *[FadeOut(f) for f in cor_sum_list]
+        )
+        self.wait(2)
+        formala.target = TextMobject('(1+2+3+\\cdots +n)^2').next_to(equal, LEFT, buff=0.5)
+        r_formala.target = TexMobject('1^3+2^3+3^3+\\cdots +n^3').next_to(equal, RIGHT ,buff=0.5)
+        self.play(
+            MoveToTarget(formala),
+            MoveToTarget(r_formala)
+        )
+        self.wait()
+        qed = TexMobject('QED').next_to(equal, DOWN, buff=1.5)
+        self.play(FadeInFrom(qed, UP))
+        self.wait(3)
