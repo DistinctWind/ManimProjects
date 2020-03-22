@@ -236,7 +236,6 @@ class main(Scene) :
         )
         self.wait()
         qed = TexMobject('QED').next_to(equal, DOWN, buff=1.5).scale(1.25)
-        qed.set_color([YELLOW, WHITE, BLUE])
-        qed.set_sheen_direction(LEFT)
+        qed.set_color_by_gradient(YELLOW, WHITE, BLUE)
         self.play(FadeInFrom(qed, UP))
         self.wait(3)
