@@ -2,6 +2,19 @@ from manimlib.imports import *
 import numpy
 import math
 
+class color_text(Scene) :
+    def construct(self) :
+        text = TextMobject('text')
+        text.set_color_by_gradient(BLUE, WHITE, YELLOW, RED)
+        tex = TexMobject('tex')
+        tex.set_color_by_gradient(BLUE, WHITE, YELLOW, RED)
+        trying = TextMobject('trying').set_color([BLUE, WHITE, YELLOW, RED])
+        trying.set_sheen_direction(LEFT)
+        self.add(VGroup(text, tex, trying).arrange(DOWN))
+
+class Dtest(ThreeDScene) :
+    def construct(self) :
+        pass
 
 class Test_vgroup_square(Scene) :
     def construct(self) :
