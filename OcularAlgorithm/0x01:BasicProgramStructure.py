@@ -67,4 +67,5 @@ class Introduction(Scene) :
             self.play(ShowCreation(chart), run_time=3, rate_func=lambda x: x)
             self.wait()
         self.wait(2)
-        
+        self.play(FadeOut(VGroup(*self.mobjects)))
+        self.wait()
