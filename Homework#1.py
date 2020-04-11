@@ -1,6 +1,7 @@
 from manimlib.imports import *
 from numpy import *
 import math
+from array import array
 
 class BeginScene(Scene) :
     def construct(self) :
