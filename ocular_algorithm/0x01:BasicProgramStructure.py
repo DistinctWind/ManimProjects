@@ -69,3 +69,7 @@ class Introduction(Scene) :
         self.wait(2)
         self.play(FadeOut(VGroup(*self.mobjects)))
         self.wait()
+
+class Sequential_structure_introduction(Scene) :
+    def construct(self) :
+        pass
