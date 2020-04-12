@@ -32,7 +32,7 @@ class Introduction(Scene) :
             VGroup(
                 Arrow(np.array([0, 2, 0]), np.array([0, 1, 0]), buff=0).set_stroke(width=3),
                 VGroup(
-                    Text('judgement', font='Arimo', stroke_width=0).scale(0.5).set_color(YELLOW),
+                    Text('Judgement', font='Arimo', stroke_width=0).scale(0.5).set_color(YELLOW),
                     Polygon(np.array([0, 1, 0]), np.array([2, 0, 0]), np.array([0, -1, 0]), np.array([-2, 0, 0])),
                 ),
                 Text('Yes', font='Arimo', stroke_width=0).scale(0.5).move_to(np.array([-2.5, 0.5, 0])).set_color(GREEN),
