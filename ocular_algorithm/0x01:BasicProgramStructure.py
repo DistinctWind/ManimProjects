@@ -124,3 +124,68 @@ class Start_end_introduction(Scene) :
         self.wait(2)
         self.play(*[FadeOut(item) for item in self.mobjects])
         self.wait(2)
+
+class Sequential_structure_introduction(Scene) :
+    def construct(self) :
+        start_text = Text('Start', font='Arimo', stroke_width=0).scale(0.5)
+        start_round_rectangle = RoundedRectangle(height=start_text.get_height()+1, width=start_text.get_width()+1)
+        start_round_rectangle.set_color('#16c0ac')
+        start = VGroup(start_text, start_round_rectangle)
+        end_text = Text('End', font='Arimo', stroke_width=0).scale(0.5)
+        end_round_rectangle = RoundedRectangle(height=end_text.get_height()+1, width=end_text.get_width()+1)
+        end_round_rectangle.set_color('#78380d')
+        end = VGroup(end_text, end_round_rectangle)
+
+        step_text_list = []
+        step_rectangle_list = []
+        step_list = []
+        step_arrow_list = []
+        for i in range(1, 33) :
+            text = Text('Step '+str(i), font='Arimo', stroke_width=0)
+            rectangle = SurroundingRectangle(text, buff=0.5)
+            rectangle.set_color(BLUE)
+            step = VGroup(text, rectangle).scale(0.5)
+
+            step_text_list.append(text)
+            step_rectangle_list.append(rectangle)
+            step_list.append(step)
+        
+        start.move_to(UP*3)
+        end.move_to(DOWN*1)
+        start_end_arrow = Arrow(start.get_bottom(), end.get_top(), buff=0)
+        self.play(*[ShowCreation(item) for item in [start, start_end_arrow, end]])
+        self.wait(2)
+
+        step_list[0].move_to(UP*1)
+        start_arrow = Arrow(start.get_bottom(), step_list[0].get_top(), buff=0)
+        step_arrow_list.append(Arrow(step_list[0].get_bottom(), end.get_top(), buff=0))
+        self.play(Uncreate(start_end_arrow))
+        self.play(ShowCreation(step_list[0]))
+        self.play(GrowArrow(start_arrow), GrowArrow(step_arrow_list[0]))
+        self.wait(2)
+
+        step_list[1].next_to(step_arrow_list[0], DOWN, buff=0)
+        end.target = end.copy().next_to(step_list[1], DOWN, buff=1)
+        step_arrow_list.append(Arrow(step_list[1].get_bottom(), end.target.get_top(), buff=0))
+        self.play(
+            ShowCreation(step_list[1]),
+            MoveToTarget(end),
+            GrowArrow(step_arrow_list[1])
+        )
+        self.wait(2)
+
+        ul_dot = Dot().to_corner(UL, buff=0)
+        ur_dot = Dot().to_corner(UR, buff=0)
+        dl_dot = Dot().to_corner(DL, buff=0)
+        dr_dot = Dot().to_corner(DR, buff=0)
+        self.play(
+            ApplyMethod(start.to_corner, UL),
+            ApplyMethod(end.to_corner, DR),
+            *[FadeOut(item) for item in [
+                start_arrow, step_list[0], step_list[1], step_arrow_list[0], step_arrow_list[1]
+            ]]
+        )
+        self.wait(2)
+
+        step_arrow_list.clear()
+        
