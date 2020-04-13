@@ -86,12 +86,12 @@ class Start_end_introduction(Scene) :
         self.wait(2)
         
         start_text = Text('Start', font='Arimo', stroke_width=0).scale(0.5)
-        start_round_rectangle = RoundedRectangle(height=start_text.get_height()+1, width=start_text.get_width()+1)
+        start_round_rectangle = RoundedRectangle(height=start_text.get_height()+1, width=start_text.get_width()+1.5)
         start_round_rectangle.set_color('#16c0ac')
         start = VGroup(start_text, start_round_rectangle)
         start.move_to(UP*2)
         end_text = Text('End', font='Arimo', stroke_width=0).scale(0.5)
-        end_round_rectangle = RoundedRectangle(height=end_text.get_height()+1, width=end_text.get_width()+1)
+        end_round_rectangle = RoundedRectangle(height=end_text.get_height()+1, width=end_text.get_width()+2)
         end_round_rectangle.set_color('#78380d')
         end = VGroup(end_text, end_round_rectangle)
         end.move_to(DOWN*2)
@@ -128,11 +128,11 @@ class Start_end_introduction(Scene) :
 class Sequential_structure_introduction(Scene) :
     def construct(self) :
         start_text = Text('Start', font='Arimo', stroke_width=0).scale(0.5)
-        start_round_rectangle = RoundedRectangle(height=start_text.get_height()+1, width=start_text.get_width()+1)
+        start_round_rectangle = RoundedRectangle(height=start_text.get_height()+1, width=start_text.get_width()+1.5)
         start_round_rectangle.set_color('#16c0ac')
         start = VGroup(start_text, start_round_rectangle)
         end_text = Text('End', font='Arimo', stroke_width=0).scale(0.5)
-        end_round_rectangle = RoundedRectangle(height=end_text.get_height()+1, width=end_text.get_width()+1)
+        end_round_rectangle = RoundedRectangle(height=end_text.get_height()+1, width=end_text.get_width()+2)
         end_round_rectangle.set_color('#78380d')
         end = VGroup(end_text, end_round_rectangle)
 
@@ -174,18 +174,9 @@ class Sequential_structure_introduction(Scene) :
         )
         self.wait(2)
 
-        ul_dot = Dot().to_corner(UL, buff=0)
-        ur_dot = Dot().to_corner(UR, buff=0)
-        dl_dot = Dot().to_corner(DL, buff=0)
-        dr_dot = Dot().to_corner(DR, buff=0)
-        self.play(
-            ApplyMethod(start.to_corner, UL),
-            ApplyMethod(end.to_corner, DR),
-            *[FadeOut(item) for item in [
-                start_arrow, step_list[0], step_list[1], step_arrow_list[0], step_arrow_list[1]
-            ]]
-        )
-        self.wait(2)
-
-        step_arrow_list.clear()
+        #Finally I give up to do the animation that shows 32 steps
+        #at the same time on the screen. It's much more harder than
+        #I thoutht.
+        self.play(FadeOut(VGroup(*[itom for itom in self.mobjects])))
+        self.wait()
         
