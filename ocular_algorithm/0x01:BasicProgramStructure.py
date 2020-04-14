@@ -251,3 +251,48 @@ class Case_structure_introduction(Scene) :
         self.wait(2)
         self.play(FadeOut(VGroup(*[item for item in self.mobjects])))
         self.wait(2)
+
+class Loop_structure_introduction(Scene) :
+    def construct(self):
+        title = Text('直到型循环', font='WenQuanYi Zen Hei', stroke_width=0).scale(0.7)
+        title.to_corner(UL)
+        start_arrow = Arrow([0, 0, 0], [0, -1, 0], stroke_width=4, buff=0)
+        start_arrow.move_to(UP*2)
+        loop_body_text = Text('Loop Body', font='Arimo', stroke_width=0).scale(0.7)
+        loop_body_rectangle = Polygon([2, 1, 0], [2, -1, 0], [-2, -1, 0], [-2, 1, 0])
+        loop_body = VGroup(loop_body_text, loop_body_rectangle).scale(0.5)
+        case_text = Text('Judgement', font='Arimo', stroke_width=0).scale(0.5)
+        case_text.set_color(YELLOW)
+        case_rhombus = Polygon([0, 1, 0], [2, 0, 0], [0, -1, 0], [-2, 0, 0])
+        case = VGroup(case_text, case_rhombus).scale(0.7)
+        case_yes_arrow = Arrow(case.get_bottom(), case.get_bottom()+DOWN, stroke_width=4, buff=0)
+        case_yes_text = Text('Yes', font='Arimo', stroke_width=0).scale(0.3)
+        case_yes = VGroup(case_yes_arrow, case_yes_text)
+        case_yes.set_color(GREEN)
+        case_no_level_line = Line(case.get_right(), case.get_right()+RIGHT)
+        case_no_vertical_line = Line(case_no_level_line.get_right(), case_no_level_line.get_right()+UP*3.3)
+        case_no_arrow = Arrow(case_no_vertical_line.get_top(), case_no_vertical_line.get_top()+LEFT*2.4, stroke_width=4, buff=0)
+        case_no_text = Text('No', font='Arimo', stroke_width=0).scale(0.3)
+        case_no = VGroup(case_no_level_line, case_no_vertical_line, case_no_arrow, case_no_text)
+        case_no.set_color(RED)
+
+        loop_body.next_to(start_arrow, DOWN, buff=0)
+        loop_case_connection_arrow = Arrow(loop_body.get_bottom(), loop_body.get_bottom()+DOWN, stroke_width=4, buff=0)
+        loop_case_connection_arrow.next_to(loop_body, DOWN, buff=0)
+        case.next_to(loop_case_connection_arrow, DOWN, buff=0)
+        case_no_level_line.next_to(case, RIGHT, buff=0)
+        case_no_vertical_line.next_to(case_no_level_line.get_right(), UP, buff=0)
+        case_no_arrow.next_to(case_no_vertical_line.get_top(), LEFT, buff=0)
+        case_no_text.next_to(case_no_level_line, UP, buff=0.1)
+        case_yes_arrow.next_to(case, DOWN, buff=0)
+        case_yes_text.next_to(case_yes_arrow, RIGHT, buff=0.1)
+        
+        self.add(
+            title,
+            start_arrow,
+            loop_body,
+            loop_case_connection_arrow,
+            case,
+            case_no,
+            case_yes
+        )
