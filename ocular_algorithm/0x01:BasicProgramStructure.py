@@ -177,6 +177,8 @@ class Sequential_structure_introduction(Scene) :
         #Finally I give up to do the animation that shows 32 steps
         #at the same time on the screen. It's much more harder than
         #I thoutht.
+        self.play(FadeOut(start), FadeOut(end))
+        self.wait(2)
         self.play(FadeOut(VGroup(*[itom for itom in self.mobjects])))
         self.wait()
         
@@ -212,7 +214,6 @@ class Case_structure_introduction(Scene) :
         step_no_rectangle = SurroundingRectangle(step_no_text, buff=0.5)
         step_no_rectangle.set_color(RED)
         step_no = VGroup(step_no_rectangle, step_no_text).scale(0.5)
-        
 
         def calibrite_case_yes() :
             case_yes_line.next_to(case_yes_connection_dot, LEFT, buff=0)
@@ -241,4 +242,12 @@ class Case_structure_introduction(Scene) :
         self.play(ShowCreation(step_yes), ShowCreation(step_no))
         self.wait(2)
         self.play(*[ApplyMethod(item.shift, UP*1.5) for item in self.mobjects])
+        self.wait(2)
+        case_arrow = Arrow(case.get_bottom(), case.get_bottom()+DOWN*1.5, buff=0, stroke_width=4)
+        start_to_case_arrow = Arrow(step_yes.get_right(), step_yes.get_right()+RIGHT*1.6, buff=0, stroke_width=4)
+        start_to_case_arrow.set_color(GREEN)
+        self.play(ReplacementTransform(VGroup(case_no, step_no), case_arrow))
+        self.play(GrowArrow(start_to_case_arrow))
+        self.wait(2)
+        self.play(FadeOut(VGroup(*[item for item in self.mobjects])))
         self.wait(2)
