@@ -182,14 +182,6 @@ class Sequential_structure_introduction(Scene) :
         
 class Case_structure_introduction(Scene) :
     def construct(self):
-        start_text = Text('Start', font='Arimo', stroke_width=0).scale(0.5)
-        start_round_rectangle = RoundedRectangle(height=start_text.get_height()+1, width=start_text.get_width()+1.5)
-        start_round_rectangle.set_color('#16c0ac')
-        start = VGroup(start_text, start_round_rectangle)
-        end_text = Text('End', font='Arimo', stroke_width=0).scale(0.5)
-        end_round_rectangle = RoundedRectangle(height=start.get_height(), width=start.get_width())
-        end_round_rectangle.set_color('#78380d')
-        end = VGroup(end_text, end_round_rectangle)
         case_text = Text('Judgement', font='Arimo', stroke_width=0).scale(0.5)
         case_text.set_color(YELLOW)
         case_rhombus = Polygon([0, 1, 0], [2, 0, 0], [0, -1, 0], [-2, 0, 0])
@@ -210,6 +202,17 @@ class Case_structure_introduction(Scene) :
         case_no_arrow.set_color(RED)
         case_no_connection_dot = Dot().scale(0.1)
         case_no = VGroup(case_no_text, case_no_line, case_no_arrow)
+        step_yes_text = Text('Yes Action', font='Arimo', stroke_width=0)
+        step_yes_text.set_color(GREEN)
+        step_yes_rectangle = SurroundingRectangle(step_yes_text, buff=0.5)
+        step_yes_rectangle.set_color(GREEN)
+        step_yes = VGroup(step_yes_rectangle, step_yes_text).scale(0.5)
+        step_no_text = Text('No Action', font='Arimo', stroke_width=0)
+        step_no_text.set_color(RED)
+        step_no_rectangle = SurroundingRectangle(step_no_text, buff=0.5)
+        step_no_rectangle.set_color(RED)
+        step_no = VGroup(step_no_rectangle, step_no_text).scale(0.5)
+        
 
         def calibrite_case_yes() :
             case_yes_line.next_to(case_yes_connection_dot, LEFT, buff=0)
@@ -224,11 +227,18 @@ class Case_structure_introduction(Scene) :
         #case_no_text.next_to(case_no_arrow, UP, buff=0.1)
         #self.add(case_no_arrow, case_no_text)
 
-        start.next_to(case, UP, buff=1)
-        end.next_to(case, DOWN, buff=1)
         case_yes_connection_dot.move_to(case.get_left())
         case_no_connection_dot.move_to(case.get_right())
         calibrite_case_yes()
         calibrite_case_no()
-        self.add(start, end)
-        self.add(case, case_yes, case_no)
+        step_yes.next_to(case_yes_arrow, DOWN, buff=0)
+        step_no.next_to(case_no_arrow, DOWN, buff=0)
+        start_arrow = Arrow(case.get_top()+UP, case.get_top(), buff=0, stroke_width=4)
+        
+        self.play(GrowArrow(start_arrow), ShowCreation(case))
+        self.wait(2)
+        self.play(ShowCreation(case_yes), ShowCreation(case_no))
+        self.play(ShowCreation(step_yes), ShowCreation(step_no))
+        self.wait(2)
+        self.play(*[ApplyMethod(item.shift, UP*1.5) for item in self.mobjects])
+        self.wait(2)
