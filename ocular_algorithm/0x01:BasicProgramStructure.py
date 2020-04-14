@@ -287,12 +287,17 @@ class Loop_structure_introduction(Scene) :
         case_yes_arrow.next_to(case, DOWN, buff=0)
         case_yes_text.next_to(case_yes_arrow, RIGHT, buff=0.1)
         
-        self.add(
-            title,
-            start_arrow,
-            loop_body,
-            loop_case_connection_arrow,
-            case,
-            case_no,
-            case_yes
-        )
+        self.play(Write(title))
+        self.wait()
+        self.play(GrowArrow(start_arrow))
+        self.wait()
+        self.play(ShowCreation(loop_body))
+        self.wait()
+        self.play(GrowArrow(loop_case_connection_arrow))
+        self.wait()
+        self.play(ShowCreation(case))
+        self.wait()
+        self.play(ShowCreation(case_no))
+        self.wait()
+        self.play(ShowCreation(case_yes))
+        self.wait(2)
