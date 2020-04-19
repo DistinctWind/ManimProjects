@@ -1,5 +1,85 @@
 from manimlib.imports import *
 
+class Alogorithm_introduction(Scene) :
+    def construct(self) :
+        title = Text('算法的特点', font='Dent', stroke_width=0).to_corner(UL)
+        self.play(Write(title))
+        self.wait(2)
+
+        effectiveness_text = Text('可行性', font='Dent', stroke_width=0).scale(0.6)
+        finiteness_text = Text('有穷性', font='Dent', stroke_width=0).scale(0.6)
+        definiteness_text = Text('确切性', font='Dent', stroke_width=0).scale(0.6)
+        input_text = Text('输入性', font='Dent', stroke_width=0).scale(0.6)
+        output_text = Text('输出性', font='Dent', stroke_width=0).scale(0.6)
+        finiteness_text.next_to(effectiveness_text, DL, buff=1)
+        definiteness_text.next_to(effectiveness_text, DR, buff=1)
+        input_text.next_to(finiteness_text, DL, buff=1)
+        output_text.next_to(definiteness_text, DR, buff=1)
+        effectiveness_text.shift(UP*2)
+        definiteness_text.shift(UP)
+        finiteness_text.shift(UP)
+
+        ef_arrow = Arrow(effectiveness_text.get_bottom(), finiteness_text.get_top())
+        ed_arrow = Arrow(effectiveness_text.get_bottom(), definiteness_text.get_top())
+        fi_arrow = Arrow(finiteness_text.get_bottom(), finiteness_text.get_bottom()+DOWN*2.41)
+        do_arrow = Arrow(definiteness_text.get_bottom(), definiteness_text.get_bottom()+DOWN*2.41)
+        io_arrow = Arrow(input_text.get_right(), output_text.get_left())
+
+        ef_arrow.set_color(GREEN)
+        ed_arrow.set_color(GREEN)
+        fi_arrow.set_color(YELLOW)
+        do_arrow.set_color(YELLOW)
+        io_arrow.set_color(RED)
+        self.play(Write(effectiveness_text))
+        self.play(GrowArrow(ef_arrow), GrowArrow(ed_arrow))
+        self.play(Write(definiteness_text), Write(finiteness_text))
+        self.play(Write(input_text), Write(output_text))
+        self.play(GrowArrow(io_arrow))
+        self.play(GrowArrow(fi_arrow), GrowArrow(do_arrow))
+        self.wait(2)
+        
+        self.play(FadeOut(VGroup(*self.mobjects)))
+
+        title = Text('算法', font='Dent', stroke_width=0).to_edge(UP)
+        self.play(Write(title))
+        introduction_text = Text('通过一定的步骤来解决一类问题的方法', font='Dent', stroke_width=0).scale(0.7)
+        add_introduction_text = Text('通常由计算机代劳', font='Dent', stroke_width=0).scale(0.5)
+        add_introduction_text.to_edge(DOWN)
+        step_list = []
+        step_list.append(Text('先告诉计算机你想要什么', font='Dent', stroke_width=0).scale(0.3))
+        step_list.append(Text('告诉计算机要怎么做', font='Dent', stroke_width=0).scale(0.3))
+        step_list.append(Text('计算机把得到的答案给你', font='Dent', stroke_width=0).scale(0.3))
+        result_list = []
+        result_list.append(Text('输入性', font='Dent', stroke_width=0).scale(0.3))
+        result_list.append(Text('可行性 | 确切性 | 有效性', font='Dent', stroke_width=0).scale(0.3))
+        result_list.append(Text('输出性', font='Dent', stroke_width=0).scale(0.3))
+        arrow_list = []
+        step_list[0].move_to(introduction_text.get_left()+DOWN+RIGHT)
+        step_list[1].next_to(step_list[0], DOWN, buff=0.25)
+        step_list[2].next_to(step_list[1], DOWN, buff=0.25)
+        result_list[0].move_to(introduction_text.get_right()+DOWN+LEFT)
+        result_list[1].next_to(result_list[0], DOWN, buff=0.25)
+        result_list[2].next_to(result_list[1], DOWN, buff=0.25)
+
+        for step, result in zip(step_list, result_list) :
+            arrow_list.append(Arrow(step.get_right(), result.get_left(), stroke_width=2).set_color(RED))
+        VGroup(
+            add_introduction_text[3],
+            add_introduction_text[4],
+            add_introduction_text[5],
+        ).set_color(GREEN_SCREEN)
+        self.play(Write(introduction_text))
+        self.wait()
+        self.play(Write(add_introduction_text))
+        self.wait()
+        self.play(Write(VGroup(*step_list)))
+        self.wait()
+        self.play(Write(VGroup(*result_list)))
+        self.play(*[GrowArrow(arrow) for arrow in arrow_list])
+        self.wait()
+
+        self.play(FadeOut(VGroup(*self.mobjects)))
+
 class Introduction(Scene) :
     def construct(self) :
         title = Text('基本算法结构', font='WenQuanYi Zen Hei', stroke_width=0).to_edge(UP).scale(0.9)
