@@ -2,6 +2,21 @@ from manimlib.imports import *
 import numpy
 import math
 
+class MultiRectangle(VGroup) :
+    def __init__(self, lin, col, width=1, height=1, **kwargs) :
+        super().__init__(**kwargs)
+        rec_list = []
+        for i in range(lin) :
+            for j in range(col) :
+                rec_list.append(Rectangle(width=width, height=height).shift(width*j*RIGHT+height*i*DOWN))
+                self.add(rec_list[-1])
+
+class TextMultiRectangle(Scene) :
+    def construct(self):
+        m = MultiRectangle(3, 5)
+        self.play(ShowCreation(m))
+        self.wait()
+
 class ZoomedSceneExample(ZoomedScene):
     CONFIG = {
         "zoom_factor": 0.3,
