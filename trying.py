@@ -1,6 +1,16 @@
 from manimlib.imports import *
+from project.utils.imports import *
 import numpy
 import math
+
+class MazeText(Scene) :
+    def construct(self):
+        maze = Maze(90, 160, scale_factor=0.08)
+        maze.set_start(1, 1)
+        maze.set_end(90, 160)
+        maze.add_rec_num()
+        self.add(maze)
+        self.wait(2)
 
 class MultiRectangle(VGroup) :
     def __init__(self, lin, col, width=1, height=1, **kwargs) :
