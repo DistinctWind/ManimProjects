@@ -5,10 +5,10 @@ import math
 
 class MazeText(Scene) :
     def construct(self):
-        maze = Maze(90, 160, scale_factor=0.08)
+        maze = Maze(9, 16, scale_factor=0.8)
         maze.set_start(1, 1)
-        maze.set_end(90, 160)
-        maze.add_rec_num()
+        maze.set_end(9, 16)
+        #maze.add_rec_num()
         self.add(maze)
         self.wait(2)
 

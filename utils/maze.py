@@ -1,9 +1,13 @@
 from manimlib.imports import *
+from random import randint
 
 class Maze(VGroup) :
     rec_list = []
+    bar_list = []
     mlin = 0
     mcol = 0
+    start = (0, 0)
+    end = (0, 0)
     scale_factor = 0
     def __init__(self, lin, col, width=1, height=1, scale_factor=1, **kwargs) :
         super().__init__(**kwargs)
@@ -40,6 +44,7 @@ class Maze(VGroup) :
         start_text.move_to(self.get_rec(lin, col).get_center())
         start_text.scale(0.8*self.scale_factor)
         start_text.set_color(GREEN)
+        self.start = self.point(lin, col)
         self.add(start_text)
     
     def set_end(self, lin, col) :
@@ -47,4 +52,6 @@ class Maze(VGroup) :
         end_text.move_to(self.get_rec(lin, col).get_center())
         end_text.scale(0.8*self.scale_factor)
         end_text.set_color(RED)
+        self.end = self.point(lin, col)
         self.add(end_text)
+    
