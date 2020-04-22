@@ -3,6 +3,20 @@ from project.utils.imports import *
 import numpy
 import math
 
+class MovingCameraText(MovingCameraScene) :
+    def setup(self) :
+        MovingCameraScene.setup(self)
+    
+    def construct(self):
+        dot = Dot()
+        frame = self.camera_frame
+        self.add(dot)
+        self.play(
+            ApplyMethod(frame.shift, RIGHT),
+            #ApplyMethod(frame.scale, 1.5)
+        )
+        self.wait()
+
 class MazeText(Scene) :
     def construct(self):
         maze = Maze(9, 16, scale_factor=0.8)
