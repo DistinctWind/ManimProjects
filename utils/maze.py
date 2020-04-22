@@ -6,18 +6,21 @@ class Maze(VGroup) :
     bar_list = []
     mlin = 0
     mcol = 0
+    length = 0
     start = (0, 0)
     end = (0, 0)
     scale_factor = 0
-    def __init__(self, lin, col, width=1, height=1, scale_factor=1, **kwargs) :
+    poi = (0, 0)
+    def __init__(self, lin, col, length=1, scale_factor=1, **kwargs) :
         super().__init__(**kwargs)
         self.mlin = lin
         self.mcol = col
         self.scale_factor = scale_factor
+        self.length = length
         for i in range(lin) :
             for j in range(col) :
-                self.rec_list.append(Rectangle(width=width, height=height, stroke_width=DEFAULT_STROKE_WIDTH*scale_factor))
-                self.rec_list[-1].shift(width*j*RIGHT+height*i*DOWN)
+                self.rec_list.append(Rectangle(width=length, height=length, stroke_width=DEFAULT_STROKE_WIDTH*scale_factor))
+                self.rec_list[-1].shift(length*j*RIGHT+length*i*DOWN)
                 self.add(self.rec_list[-1])
         self.scale(scale_factor)
         self.move_to(ORIGIN)
@@ -44,7 +47,7 @@ class Maze(VGroup) :
         start_text.move_to(self.get_rec(lin, col).get_center())
         start_text.scale(0.8*self.scale_factor)
         start_text.set_color(GREEN)
-        self.start = self.point(lin, col)
+        self.start = (lin, col)
         self.add(start_text)
     
     def set_end(self, lin, col) :
@@ -52,6 +55,12 @@ class Maze(VGroup) :
         end_text.move_to(self.get_rec(lin, col).get_center())
         end_text.scale(0.8*self.scale_factor)
         end_text.set_color(RED)
-        self.end = self.point(lin, col)
+        self.end = (lin, col)
         self.add(end_text)
     
+    def get_arrow(self, poi, dir, color=YELLOW) :
+        """
+        这个函数返回一个从点poi指向dir方向的箭头
+        """
+        location = self.get_rec(*poi).get_center()
+        return Arrow(location, location+dir*self.length, buff=0).set_color(color)

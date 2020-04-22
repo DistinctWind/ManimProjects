@@ -24,6 +24,8 @@ class MazeText(Scene) :
         maze.set_end(9, 16)
         #maze.add_rec_num()
         self.add(maze)
+        arrow = maze.get_arrow((1,3), DOWN)
+        self.add(arrow)
         self.wait(2)
 
 class MultiRectangle(VGroup) :
