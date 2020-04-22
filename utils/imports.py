@@ -1,1 +1,0 @@
-from project.utils.maze import *
