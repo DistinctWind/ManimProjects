@@ -3,6 +3,23 @@ from project.utils.imports import *
 import numpy
 import math
 
+class TextRegularPolygon(Scene) :
+    def construct(self) :
+        tri2 = RegularPolygon(n=5, start_angle=PI/2)
+        tri3 = RegularPolygon(n=5, start_angle=PI)
+        tri1 = RegularPolygon(n=5, start_angle=0)
+        tri4 = RegularPolygon(n=5, start_angle=3*PI/2)
+        tri1.to_corner(UL)
+        tri2.to_corner(UR)
+        tri3.to_corner(DR)
+        tri4.to_corner(DL)
+        self.add(
+            tri1,
+            tri2,
+            tri3,
+            tri4,
+        )
+
 class MovingCameraText(MovingCameraScene) :
     def setup(self) :
         MovingCameraScene.setup(self)
