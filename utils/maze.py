@@ -4,6 +4,7 @@ from random import randint
 class Maze(VGroup) :
     rec_list = []
     bar_list = []
+    path_poi_list = []
     mlin = 0
     mcol = 0
     length = 0
@@ -47,7 +48,8 @@ class Maze(VGroup) :
         start_text.move_to(self.get_rec(lin, col).get_center())
         start_text.scale(0.8*self.scale_factor)
         start_text.set_color(GREEN)
-        self.start = (lin, col)
+        self.poi = self.start = (lin, col)
+        self.path_poi_list.append((lin, col))
         self.add(start_text)
     
     def set_end(self, lin, col) :
@@ -64,3 +66,13 @@ class Maze(VGroup) :
         """
         location = self.get_rec(*poi).get_center()
         return Arrow(location, location+dir*self.length, buff=0).set_color(color)
+    
+    def move_poi_to(self, target) :
+        assert(isinstance(target, tuple))
+        self.path_poi_list.append(target)
+        self.poi = target
+    
+    def role_back(self) :
+        if len(self.path_list)==1 :
+            raise RuntimeError
+        self.path_poi_list.pop()

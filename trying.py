@@ -3,6 +3,12 @@ from project.utils.imports import *
 import numpy
 import math
 
+class MazeTest(Scene) :
+    def construct(self) :
+        maze = Maze(3, 5)
+        
+#Oh my god.
+#I find that all text should be test!!!
 class TextRegularPolygon(Scene) :
     def construct(self) :
         tri2 = RegularPolygon(n=5, start_angle=PI/2)
