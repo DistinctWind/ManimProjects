@@ -4,6 +4,7 @@ from random import randint
 class Maze(VGroup) :
     rec_list = []
     bar_list = []
+    bar_poi_list = []
     path_poi_list = []
     mlin = 0
     mcol = 0
@@ -59,6 +60,12 @@ class Maze(VGroup) :
         end_text.set_color(RED)
         self.end = (lin, col)
         self.add(end_text)
+
+    def set_bar(self, lin, col) :
+        bar_poi_list.append((lin, col))
+        bar = TexMobject('#')
+        bar.move_to(get_rec(lin, col)).scale(0.8*self.scale_factor)
+        bar_list.append(bar)
     
     def get_arrow(self, poi, dir, color=YELLOW) :
         """
