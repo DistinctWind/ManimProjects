@@ -81,6 +81,18 @@ class Maze(VGroup) :
                 if random()<rate :
                     self.set_bar(i, j)
     
+    def set_bar_by_str(self, s) :
+        assert(isinstance(s, str))
+        lines = s.split('\n')
+        bar_map = []
+        for line in lines :
+            bar_map.append(list(line))
+        for lin in range(1, self.mlin+1) :
+            for col in range(1, self.mcol+1) :
+                if bar_map[lin-1][col-1]=='#' :
+                    self.set_bar(lin, col)
+        
+    
     def get_arrow(self, lin, col, dir, color=YELLOW) :
         """
         这个函数返回一个从点poi指向dir方向的箭头
