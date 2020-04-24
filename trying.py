@@ -9,7 +9,7 @@ class MazeTest(Scene) :
         maze.set_start(1, 1)
         maze.set_end(9, 16)
         maze.set_bar_randomly()
-        arrow = maze.get_arrow((3, 5), UP)
+        arrow = maze.get_arrow(3, 5, UP)
         self.add(maze)
         self.add(arrow)
 #Oh my god.

@@ -12,7 +12,7 @@ class Maze(VGroup) :
     start = (0, 0)
     end = (0, 0)
     scale_factor = 0
-    poi = (0, 0)
+    loc = (0, 0)
     def __init__(self, lin, col, length=1, scale_factor=1, **kwargs) :
         super().__init__(**kwargs)
         self.mlin = lin
@@ -49,7 +49,8 @@ class Maze(VGroup) :
         start_text.move_to(self.get_rec(lin, col).get_center())
         start_text.scale(0.8*self.scale_factor)
         start_text.set_color(GREEN)
-        self.poi = self.start = (lin, col)
+        self.start = (lin, col)
+        self.loc = (lin, col)
         self.path_poi_list.append((lin, col))
         self.add(start_text)
     
@@ -79,19 +80,18 @@ class Maze(VGroup) :
                 if random()<rate :
                     self.set_bar(i, j)
     
-    def get_arrow(self, poi, dir, color=YELLOW) :
+    def get_arrow(self, lin, col, dir, color=YELLOW) :
         """
         这个函数返回一个从点poi指向dir方向的箭头
         """
-        location = self.get_rec(*poi).get_center()
+        location = self.get_rec(lin, col).get_center()
         return Arrow(location, location+dir*self.length*self.scale_factor, buff=0).set_color(color)
     
-    def move_poi_to(self, target) :
-        assert(isinstance(target, tuple))
-        self.path_poi_list.append(target)
-        self.poi = target
+    def move_poi(self, lin, col) :
+        self.loc = (lin, col)
+        self.path_poi_list.append((lin, col))
     
     def role_back(self) :
         if len(self.path_list)==1 :
             raise RuntimeError
-        self.path_poi_list.pop()
+        self.loc = self.path_poi_list.pop()
