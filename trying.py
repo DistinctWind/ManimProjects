@@ -5,8 +5,11 @@ import math
 
 class MazeTest(Scene) :
     def construct(self) :
-        maze = Maze(3, 5)
-        
+        maze = Maze(50, 50, scale_factor=0.15)
+        maze.set_start(1, 1)
+        maze.set_end(50, 50)
+        maze.set_bar_randomly()
+        self.add(maze)
 #Oh my god.
 #I find that all text should be test!!!
 class TextRegularPolygon(Scene) :

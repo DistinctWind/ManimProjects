@@ -1,5 +1,5 @@
 from manimlib.imports import *
-from random import randint
+from random import random, seed
 
 class Maze(VGroup) :
     rec_list = []
@@ -62,10 +62,22 @@ class Maze(VGroup) :
         self.add(end_text)
 
     def set_bar(self, lin, col) :
-        bar_poi_list.append((lin, col))
-        bar = TexMobject('#')
-        bar.move_to(get_rec(lin, col)).scale(0.8*self.scale_factor)
-        bar_list.append(bar)
+        self.bar_poi_list.append((lin, col))
+        bar = TextMobject('\#')
+        bar.move_to(self.get_rec(lin, col))
+        bar.scale(self.scale_factor)
+        bar.set_color(YELLOW)
+        self.bar_list.append(bar)
+        self.add(bar)
+    
+    def set_bar_randomly(self, rate=0.25) :
+        seed(a=None, version=2)
+        for i in range(1, self.mlin+1) :
+            for j in range(1, self.mcol+1) :
+                if (i, j) == self.start or (i, j) == self.end :
+                    continue
+                if random()<rate :
+                    self.set_bar(i, j)
     
     def get_arrow(self, poi, dir, color=YELLOW) :
         """
