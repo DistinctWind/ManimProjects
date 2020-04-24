@@ -89,7 +89,7 @@ class Maze(VGroup) :
             bar_map.append(list(line))
         for lin in range(1, self.mlin+1) :
             for col in range(1, self.mcol+1) :
-                if bar_map[lin-1][col-1]=='#' :
+                if bar_map[lin-1][col-1]=='1' :
                     self.set_bar(lin, col)
         
     
