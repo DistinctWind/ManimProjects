@@ -2,23 +2,19 @@ from manimlib.imports import *
 from random import random, seed
 
 class Maze(VGroup) :
-    rec_list = []
-    bar_list = []
-    bar_poi_list = []
-    path_poi_list = []
-    mlin = 0
-    mcol = 0
-    length = 0
-    start = (0, 0)
-    end = (0, 0)
-    scale_factor = 0
-    loc = (0, 0)
     def __init__(self, lin, col, length=1, scale_factor=1, **kwargs) :
         super().__init__(**kwargs)
+        self.rec_list = []
+        self.bar_list = []
+        self.bar_poi_list = []
+        self.path_poi_list = []
         self.mlin = lin
         self.mcol = col
-        self.scale_factor = scale_factor
         self.length = length
+        self.start = (0, 0)
+        self.end = (0, 0)
+        self.scale_factor = scale_factor
+        self.loc = (0, 0)
         for i in range(lin) :
             for j in range(col) :
                 self.rec_list.append(Rectangle(width=length, height=length, stroke_width=DEFAULT_STROKE_WIDTH*scale_factor))

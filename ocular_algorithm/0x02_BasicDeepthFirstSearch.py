@@ -13,11 +13,7 @@ class Begin_introduction(Scene) :
             11000
             """
         )
-        self.play(ShowCreation(easy_maze), rate_func=linear)
+        self.add(easy_maze)
         self.wait(2)
-
-        hard_maze = Maze(9, 16)
-        hard_maze.set_start(1, 1)
-        hard_maze.set_end(9, 16)
 
         
