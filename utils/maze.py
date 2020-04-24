@@ -84,7 +84,7 @@ class Maze(VGroup) :
         这个函数返回一个从点poi指向dir方向的箭头
         """
         location = self.get_rec(*poi).get_center()
-        return Arrow(location, location+dir*self.length, buff=0).set_color(color)
+        return Arrow(location, location+dir*self.length*self.scale_factor, buff=0).set_color(color)
     
     def move_poi_to(self, target) :
         assert(isinstance(target, tuple))
