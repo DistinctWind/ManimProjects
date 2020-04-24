@@ -66,8 +66,9 @@ class Maze(VGroup) :
         self.bar_poi_list.append((lin, col))
         bar = TextMobject('\#')
         bar.move_to(self.get_rec(lin, col))
-        bar.scale(self.scale_factor)
+        bar.scale(1.2*self.scale_factor)
         bar.set_color(YELLOW)
+        bar.set_stroke(width=2)
         self.bar_list.append(bar)
         self.add(bar)
     
