@@ -3,12 +3,6 @@ from project.utils.imports import *
 import numpy
 import math
 
-class TestUncreateLinear(Scene) :
-    def construct(self) :
-        text = Text('Helloawoeifjadsofjonwiuebskbnc', stroke_width=0)
-        self.play(ShowCreation(text))
-        self.play(Uncreate_linear(text), rate_func=linear)
-        self.wait()
 class MazeTest(Scene) :
     def construct(self) :
         maze = Maze(9, 16, scale_factor=0.7)
