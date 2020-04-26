@@ -47,12 +47,20 @@ class Begin_introduction(Scene) :
                 ncol = col+mov_col
                 arrow = hard_maze.get_arrow(lin, col, direction)
                 if hard_maze.judge(nlin, ncol) :
-                    self.play(ShowCreation(arrow), poi.move_to, hard_maze.get_rec(nlin, ncol).get_center(), run_time=0.25, rate_func=linear)
+                    self.play(
+                        ShowCreation(arrow),
+                        ApplyMethod(poi.move_to, hard_maze.get_rec(nlin, ncol).get_center())
+                        , run_time=0.25, rate_func=linear
+                    )
                     hard_maze.move_poi(nlin, ncol)
                     if search(nlin, ncol) :
                         return True
                     hard_maze.role_back()
-                    self.play(Uncreate(arrow, rate_func=lambda t: linear(1-t)), ApplyMethod(poi.move_to, hard_maze.get_rec(lin, col).get_center(), rate_func=linear), run_time=0.25)
+                    self.play(
+                        Uncreate(arrow, rate_func=lambda t: linear(1-t)), 
+                        ApplyMethod(poi.move_to, hard_maze.get_rec(lin, col).get_center(), 
+                        rate_func=linear), run_time=0.25
+                    )
             return False
         
         print(search(*hard_maze.start))
