@@ -64,3 +64,28 @@ class Begin_introduction(Scene) :
             return False
         
         print(search(*hard_maze.start))
+
+class Choose_introduction(Scene) :
+    def construct(self):
+        maze = Maze(3, 5)
+        maze.set_start(2,2)
+        maze.set_end(3, 5)
+        poi = Dot().move_to(maze.get_rec(*maze.start))
+        self.play(ShowCreation(maze))
+        self.wait(2)
+        self.play(ShowCreation(poi))
+        arrows = [
+            maze.get_arrow(*maze.loc, direction)
+            for direction in [UP, RIGHT, DOWN, LEFT]
+        ]
+        for arrow in arrows :
+            self.play(GrowArrow(arrow))
+        self.wait(2)
+        poi_and_arrows = VGroup(poi, *arrows)
+        self.play(ApplyMethod(poi_and_arrows.move_to, maze.get_rec(2, 3)))
+        self.wait(2)
+        self.play(
+            *[FadeOut(arrow) for arrow in arrows], 
+            ApplyMethod(poi.move_to, maze.get_rec(*maze.start))
+        )
+        self.wait(2)
