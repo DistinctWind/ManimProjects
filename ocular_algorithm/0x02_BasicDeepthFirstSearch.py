@@ -34,3 +34,25 @@ class Begin_introduction(Scene) :
         )
         self.play(ReplacementTransform(easy_maze, hard_maze))
         self.wait(2)
+
+        poi = Dot().move_to(hard_maze.get_rec(*hard_maze.start))
+        self.play(ShowCreation(poi))
+        hard_maze.setup_map()
+        dir_set = hard_maze.get_search_order(RIGHT, DOWN, LEFT, UP)
+        def search(lin, col) :
+            if (lin, col)==hard_maze.end :
+                return True
+            for mov_lin, mov_col, direction in dir_set :
+                nlin = lin+mov_lin
+                ncol = col+mov_col
+                arrow = hard_maze.get_arrow(lin, col, direction)
+                if hard_maze.judge(nlin, ncol) :
+                    self.play(ShowCreation(arrow), poi.move_to, hard_maze.get_rec(nlin, ncol).get_center(), run_time=0.25, rate_func=linear)
+                    hard_maze.move_poi(nlin, ncol)
+                    if search(nlin, ncol) :
+                        return True
+                    hard_maze.role_back()
+                    self.play(Uncreate(arrow, rate_func=lambda t: linear(1-t)), ApplyMethod(poi.move_to, hard_maze.get_rec(lin, col).get_center(), rate_func=linear), run_time=0.25)
+            return False
+        
+        print(search(*hard_maze.start))

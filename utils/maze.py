@@ -23,6 +23,22 @@ class Maze(VGroup) :
         self.scale(scale_factor)
         self.move_to(ORIGIN)
 
+    def setup_map(self) :
+        self.vis = [ [ False for _col in range(self.mcol) ] for _lin in range(self.mlin) ]
+    
+    def get_search_order(self, *dirs) :
+        res = []
+        for i in dirs :
+            if all(i==UP) :
+                res.append((-1, 0, UP))
+            if all(i==RIGHT) :
+                res.append((0, 1, RIGHT))
+            if all(i==DOWN) :
+                res.append((1, 0, DOWN))
+            if all(i==LEFT) :
+                res.append((0, -1, LEFT))
+        return res
+
     def get_rec(self, lin, col) :
         """
         这个函数会返回给定坐标的矩形，
@@ -86,7 +102,7 @@ class Maze(VGroup) :
                 if bar_map[lin-1][col-1]=='1' :
                     self.set_bar(lin, col)    
         
-    def get_arrow(self, lin, col, dir, color=YELLOW) :
+    def get_arrow(self, lin, col, dir, color=BLUE) :
         """
         这个函数返回一个从点poi指向dir方向的箭头
         """
@@ -98,6 +114,17 @@ class Maze(VGroup) :
         self.path_poi_list.append((lin, col))
     
     def role_back(self) :
-        if len(self.path_list)==1 :
+        if len(self.path_poi_list)==1 :
             raise RuntimeError
         self.loc = self.path_poi_list.pop()
+    
+    def judge(self, lin, col) :
+        if (lin, col) in self.bar_poi_list :
+            return False
+        if not 1<=lin<=self.mlin :
+            return False
+        if not 1<=col<=self.mcol :
+            return False
+        if (lin, col) in self.path_poi_list :
+            return False
+        return True
