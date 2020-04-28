@@ -121,6 +121,42 @@ class Choose_introduction(Scene) :
         self.play(FadeOut(VGroup(*self.mobjects)))
         self.wait(2)
 
-class Limit_introduction(Scene) :
-    def construct(self) :
+class Show_path(Scene):
+    def construct(self):
+        maze = Maze(3, 5)
+        maze.set_start(1, 1)
+        maze.set_end(3, 5)
+        dir_set = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        path_group = []
+        path = []
+        def search(lin, col):
+            nonlocal path, path_group
+            if (lin, col)==maze.end:
+                path_group.append(VGroup(*[p.deepcopy() for p in path]).set_color_by_gradient(GREEN, RED))
+            for mov_x, mov_y, direction in dir_set:
+                nlin = lin+mov_x
+                ncol = col+mov_y
+                if maze.judge(nlin, ncol):
+                    maze.move_poi(nlin, ncol)
+                    path.append(maze.get_line(lin, col, direction))
+                    search(nlin, ncol)
+                    maze.role_back()
+                    path.pop()
+        
+        self.play(ShowCreation(maze))
+        self.wait(2)
+        search(*maze.start)
+        cnt = 0
+        text = Text('cnt = ', stroke_width=0).scale(0.5).to_corner(UL)
+        c = TexMobject('0', stroke_width=0)
+        c.next_to(text)
+        self.play(Write(text), Write(c))
+        for p in path_group:
+            cnt+=1
+            c.target = TexMobject(str(cnt), stroke_width=0).next_to(text)
+            self.play(ShowCreation(p), MoveToTarget(c))
+        
+
+class Limit_introduction(Scene):
+    def construct(self):
         pass

@@ -109,6 +109,10 @@ class Maze(VGroup) :
         location = self.get_rec(lin, col).get_center()
         return Arrow(location, location+dir*self.length*self.scale_factor, buff=0).set_color(color)
     
+    def get_line(self, lin, col, dir, color=BLUE):
+        location = self.get_rec(lin, col).get_center()
+        return Line(location, location+dir*self.length*self.scale_factor, buff=0).set_color(color)
+    
     def move_poi(self, lin, col) :
         self.loc = (lin, col)
         self.path_poi_list.append((lin, col))
