@@ -1,6 +1,17 @@
 from manimlib.imports import *
 from random import random, seed
 
+class DashedRectangle(VGroup):
+    def __init__(self, length=1, **kwargs):
+        super().__init__(**kwargs)
+        self.line_list = [
+            DashedLine(ORIGIN, ORIGIN+RIGHT*length),
+            DashedLine(ORIGIN+RIGHT*length, ORIGIN+(RIGHT+UP)*length),
+            DashedLine(ORIGIN+(RIGHT+UP)*length, ORIGIN+UP*length),
+            DashedLine(ORIGIN+UP*length, ORIGIN),
+        ]
+        self.add(*self.line_list)
+        
 class Maze(VGroup) :
     def __init__(self, lin, col, length=1, scale_factor=1, **kwargs) :
         super().__init__(**kwargs)

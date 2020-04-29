@@ -147,16 +147,44 @@ class Show_path(Scene):
         self.wait(2)
         search(*maze.start)
         cnt = 0
-        text = Text('cnt = ', stroke_width=0).scale(0.5).to_corner(UL)
+        text = Text('cnt = ',font='Microsoft YaHei', stroke_width=0).scale(0.5).to_corner(UL)
         c = TexMobject('0', stroke_width=0)
         c.next_to(text)
         self.play(Write(text), Write(c))
-        for p in path_group:
+        for i in range(len(path_group)):
             cnt+=1
             c.target = TexMobject(str(cnt), stroke_width=0).next_to(text)
-            self.play(ShowCreation(p), MoveToTarget(c))
+            if i>=1:
+                self.play(Uncreate(path_group[i-1]), run_time=0.25)
+            self.play(ShowCreation(path_group[i]), MoveToTarget(c), run_time=0.25)
         
 
 class Limit_introduction(Scene):
     def construct(self):
-        pass
+        maze = Maze(3, 3)
+        maze.set_bar(2, 1)
+        poi = Dot()
+        poi.move_to(maze.get_rec(1, 2).get_center())
+        arrow_config = [
+            (1, 2, UP),
+            (1, 2, RIGHT),
+            (1, 2, DOWN),
+            (1, 2, LEFT),
+        ]
+        arrows = []
+        for lin, col, direction in arrow_config:
+            arrows.append(maze.get_arrow(lin, col, direction))
+        out_edge_rectangle = DashedRectangle(1)
+        out_edge_rectangle.next_to(maze.get_rec(1, 2), UP, buff=0)
+        cross = Cross(out_edge_rectangle)
+
+        self.play(ShowCreation(maze))
+        self.play(ShowCreation(poi))
+        self.wait()
+        self.play(ShowCreation(VGroup(*arrows)))
+        self.wait()
+        self.play(ShowCreation(out_edge_rectangle))
+        self.wait()
+        self.play(ShowCreation(cross), ApplyMethod(out_edge_rectangle.set_color, RED))
+        self.wait()
+        self.play(FadeOut(out_edge_rectangle), FadeOut(cross), Uncreate(arrows[0]))
