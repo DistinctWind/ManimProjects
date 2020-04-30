@@ -187,4 +187,18 @@ class Limit_introduction(Scene):
         self.wait()
         self.play(ShowCreation(cross), ApplyMethod(out_edge_rectangle.set_color, RED))
         self.wait()
-        self.play(FadeOut(out_edge_rectangle), FadeOut(cross), Uncreate(arrows[0]))
+        self.play(FadeOut(out_edge_rectangle), FadeOut(cross))
+        self.play(Uncreate(arrows[0]))
+        self.wait()
+        self.play(ShowCreation(arrows[0]))
+        """
+        self.play(
+            ApplyMethod(VGroup(*arrows).move_to, maze.get_rec(2, 2).get_center()),
+            ApplyMethod(poi.move_to, maze.get_rec(2, 2).get_center()),
+        )
+        
+        self.wait(2)
+        cross = Cross(maze.get_rec(2, 1))
+        self.play(ShowCreation(cross), ApplyMethod(maze.get_rec(2, 1).set_color, RED))
+        self.wait(2)
+        """
