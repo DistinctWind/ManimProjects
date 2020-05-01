@@ -206,7 +206,7 @@ class Limit_introduction(Scene):
         )
         self.wait(2)
         self.play(
-            *[Uncreate(arrows[i]) for i in range(1, 4)],
+            *[Uncreate(arrows[i]) for i in range(1, 3)],
             FadeOut(poi)
         )
         
