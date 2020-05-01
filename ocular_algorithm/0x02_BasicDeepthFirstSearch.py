@@ -162,7 +162,7 @@ class Show_path(Scene):
 class Limit_introduction(Scene):
     def construct(self):
         maze = Maze(3, 3)
-        maze.set_bar(2, 1)
+        maze.set_bar(1, 1)
         poi = Dot()
         poi.move_to(maze.get_rec(1, 2).get_center())
         arrow_config = [
@@ -190,33 +190,23 @@ class Limit_introduction(Scene):
         self.play(FadeOut(out_edge_rectangle), FadeOut(cross))
         self.remove(arrows[0])
         self.play(Uncreate(arrows[0].copy()))
-        self.wait()
+        self.wait(2)
+        cross = Cross(maze.get_rec(1, 1))
+        self.remove(maze.get_rec(1, 1))
+        self.add(maze.get_rec(1, 1))
+        self.play(
+            ApplyMethod(maze.get_rec(1, 1).set_color, RED),
+            ShowCreation(cross)
+        )
+        self.remove(arrows[3])
+        self.play(
+            Uncreate(arrows[3].copy()),
+            ApplyMethod(maze.get_rec(1, 1).set_color, WHITE),
+            FadeOut(cross)
+        )
+        self.wait(2)
         self.play(
             *[Uncreate(arrows[i]) for i in range(1, 4)],
             FadeOut(poi)
         )
         
-        poi.move_to(maze.get_rec(2, 2).get_center())
-        arrows = []
-        arrow_config = [
-            (2, 2, UP),
-            (2, 2, RIGHT),
-            (2, 2, DOWN),
-            (2, 2, LEFT),
-        ]
-        for lin, col, direction in arrow_config:
-            arrows.append(maze.get_arrow(lin, col, direction))
-        self.play(ShowCreation(poi))
-        self.wait()
-        self.play(ShowCreation(VGroup(*arrows)))
-        self.wait()
-        cross = Cross(maze.get_rec(2, 1))
-        self.remove(maze.get_rec(2, 1))
-        self.add(maze.get_rec(2, 1))
-        self.play(
-            ShowCreation(cross),
-            ApplyMethod(maze.get_rec(2, 1).set_color, RED)
-        )
-        self.wait(2)
-        self.play(FadeOut(VGroup(*self.mobjects)))
-        self.wait()
