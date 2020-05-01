@@ -3,6 +3,15 @@ from project.utils.imports import *
 import numpy
 import math
 
+class UnShowCreationTest(Scene):
+    def construct(self):
+        dot = Dot()
+        self.play(ShowCreation(dot))
+        dot_cmp = dot.copy()
+        self.play(Uncreate(dot))
+        self.play(ShowCreation(dot))
+        self.play(ShowCreation(dot_cmp))
+
 class MazeTest(Scene) :
     def construct(self) :
         maze = Maze(9, 16, scale_factor=0.7)
