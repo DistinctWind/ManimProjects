@@ -58,8 +58,8 @@ class Begin_introduction(Scene) :
                     hard_maze.role_back()
                     self.play(
                         Uncreate(arrow, rate_func=lambda t: linear(1-t)), 
-                        ApplyMethod(poi.move_to, hard_maze.get_rec(lin, col).get_center(), 
-                        rate_func=linear), run_time=0.25
+                        ApplyMethod(poi.move_to, hard_maze.get_rec(lin, col).get_center(), rate_func=linear), 
+                        run_time=0.25
                     )
             return False
         
@@ -257,3 +257,46 @@ class Limit_introduction(Scene):
                 return True
 
         round_search(1, 1, RIGHT, 0)
+
+class No_solution_introduction(Scene):
+    def construct(self):
+        maze = Maze(5, 5)
+        maze.set_start(1, 1)
+        maze.set_end(5, 5)
+        maze.set_bar_by_str(
+            """
+            00111
+            10000
+            11010
+            11011
+            00010
+            """
+        )
+        poi = Dot()
+        poi.move_to(maze.get_rec(1, 1).get_center())
+        dir_set = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        
+        self.play(ShowCreation(maze))
+        self.play(ShowCreation(poi))
+
+        def search(lin, col):
+            for mov_x, mov_y, direction in dir_set:
+                nlin = lin+mov_x
+                ncol = col+mov_y
+                arrow = maze.get_arrow(lin, col, direction)
+                if maze.judge(nlin, ncol):
+                    maze.move_poi(nlin, ncol)
+                    self.play(
+                        ShowCreation(arrow),
+                        ApplyMethod(poi.move_to, maze.get_rec(nlin, ncol).get_center()),
+                        run_time=0.25, rate_func=linear
+                    )
+                    search(nlin, ncol)
+                    maze.role_back()
+                    self.play(
+                        Uncreate(arrow, rate_func=lambda t: linear(1-t)),
+                        ApplyMethod(poi.move_to, maze.get_rec(lin, col).get_center(), rate_func=linear),
+                        run_time=0.25
+                    )
+        
+        search(1, 1)
