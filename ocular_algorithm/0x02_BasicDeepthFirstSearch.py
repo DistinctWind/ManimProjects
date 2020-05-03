@@ -210,3 +210,50 @@ class Limit_introduction(Scene):
             FadeOut(poi)
         )
         
+        endless_maze = Maze(5, 5)
+        endless_maze.set_start(1, 1)
+        endless_maze.set_end(3, 3)
+        endless_maze.set_bar_by_str(
+            """
+            00000
+            01110
+            01010
+            01110
+            00000
+            """
+        )
+        self.play(ReplacementTransform(maze, endless_maze))
+        dir_set = endless_maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        poi = Dot()
+        poi.move_to(endless_maze.get_rec(*endless_maze.start).get_center())
+        self.play(ShowCreation(poi))
+
+        def round_search(lin, col, direction, depth):
+            if depth>30:
+                return True
+            dir_dic = {
+                (1, 1): RIGHT,
+                (1, 5): DOWN, 
+                (5, 5): LEFT,
+                (5, 1): UP,
+            }
+            mov_dic = {
+                tuple(RIGHT): (0, 1),
+                tuple(DOWN): (1, 0),
+                tuple(LEFT): (0, -1),
+                tuple(UP): (-1, 0)
+            }
+            if (lin, col) in dir_dic:
+                direction=dir_dic[(lin, col)]
+            mov_x, mov_y = mov_dic[tuple(direction)]
+            nlin, ncol = lin+mov_x, col+mov_y
+            arrow = endless_maze.get_arrow(lin, col, direction)
+            self.play(
+                ShowCreation(arrow),
+                ApplyMethod(poi.move_to, endless_maze.get_rec(nlin, ncol).get_center()),
+                run_time=0.25, rate_func=linear
+            )
+            if round_search(nlin, ncol, direction, depth+1):
+                return True
+
+        round_search(1, 1, RIGHT, 0)

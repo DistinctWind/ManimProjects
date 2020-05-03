@@ -133,13 +133,15 @@ class Maze(VGroup) :
             raise RuntimeError
         self.loc = self.path_poi_list.pop()
     
-    def judge(self, lin, col) :
+    def judge(self, lin, col, ignore_path=False) :
         if (lin, col) in self.bar_poi_list :
             return False
         if not 1<=lin<=self.mlin :
             return False
         if not 1<=col<=self.mcol :
             return False
+        if ignore_path:
+            return True
         if (lin, col) in self.path_poi_list :
             return False
         return True
