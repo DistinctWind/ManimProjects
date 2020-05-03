@@ -300,3 +300,73 @@ class No_solution_introduction(Scene):
                     )
         
         search(1, 1)
+    
+class Show_search(MovingCameraScene):
+    def setup(self):
+        MovingCameraScene.setup(self)
+    def construct(self):
+        frame = self.camera_frame
+        poi = Dot()
+        maze = Maze(9, 16, scale_factor=0.75)
+        maze.set_start(1, 1)
+        maze.set_end(9, 16)
+        maze.set_bar_by_str(
+            """
+            0001101101001010
+            0100000001101000
+            0101110100001011
+            0100010010100000
+            0111101010101111
+            0010001110001000
+            1000100010111010
+            0010101011100010
+            1110101000001010
+            """
+        )
+        poi.move_to(maze.get_rec(1, 1).get_center())
+        
+        self.play(ShowCreation(maze))
+        self.play(ShowCreation(poi))
+        self.play(ApplyMethod(frame.move_to, poi.get_center()))
+        self.play(ApplyMethod(frame.scale, 0.5))
+        """
+        这种方法最终还是失败了
+        更新点点的位置也许是因为添加了这个updater而变得卡顿
+        与其这样，还不如直接手动移动镜头呢！
+
+        好像还是失败了～
+        算了没有关系啦！别在意就好。
+        def update_frame_location(obj):
+            obj.move_to(poi.get_center())
+        frame.add_updater(update_frame_location)
+        """
+        #Test if it works
+        #self.play(ApplyMethod(poi.move_to, ORIGIN))
+
+        dir_set = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+
+        def search(lin, col):
+            if (lin, col)==maze.end:
+                return True
+            for mov_x, mov_y, direction in dir_set:
+                nlin = lin+mov_x
+                ncol = col+mov_y
+                arrow = maze.get_arrow(lin, col, direction)
+                if maze.judge(nlin, ncol):
+                    maze.move_poi(nlin, ncol)
+                    self.play(
+                        ShowCreation(arrow),
+                        ApplyMethod(poi.move_to, maze.get_rec(nlin, ncol).get_center()),
+                        ApplyMethod(frame.move_to, maze.get_rec(nlin, ncol).get_center()),
+                        run_time=0.5, rate_func=linear
+                    )
+                    if search(nlin, ncol):
+                        return True
+                    self.play(
+                        Uncreate(arrow, rate_func=lambda t: linear(1-t)),
+                        ApplyMethod(poi.move_to, maze.get_rec(nlin, ncol).get_center(), rate_func=linear),
+                        ApplyMethod(frame.move_to, maze.get_rec(nlin, ncol).get_center(), rate_func=linear),
+                        run_time=0.5
+                    )
+                    
+        search(1, 1)
