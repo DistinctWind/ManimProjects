@@ -19,7 +19,7 @@ class Introduction_scene(Scene) :
         easy_maze.set_bar_by_str(
             """
             00000
-            00110
+            01110
             00010
             01000
             00100
@@ -96,6 +96,23 @@ class Introduction_scene(Scene) :
         ).set_color(RED)
         self.play(ShowCreation(path_2))
         self.wait()
+        return super().construct()
+
+class Depth_first_search_for_the_shortest_way(Scene):
+    def construct(self):
+        maze = Maze(5, 5)
+        maze.set_start(3, 3)
+        maze.set_end(5, 1)
+        maze.set_bar_by_str(
+            """
+            00000
+            01110
+            00010
+            01000
+            00100
+            """
+        )
+
         return super().construct()
 
 class trying2(Scene) :
