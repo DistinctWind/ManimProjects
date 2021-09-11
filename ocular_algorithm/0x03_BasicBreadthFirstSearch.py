@@ -71,9 +71,9 @@ class Introduction_scene(Scene) :
 
         path_1 = VGroup(
             easy_maze.get_line(3, 3, LEFT),
-            easy_maze.get_line(3, 2, LEFT),
-            easy_maze.get_line(3, 1, DOWN),
-            easy_maze.get_line(4, 1, DOWN),
+            easy_maze.get_line(3, 2, LEFT).shift(0.05*RIGHT),
+            easy_maze.get_line(3, 1, DOWN).shift(0.05*RIGHT),
+            easy_maze.get_line(4, 1, DOWN).shift(0.05*RIGHT),
         )
         self.play(ShowCreation(path_1))
         self.wait()
@@ -112,7 +112,6 @@ class Depth_first_search_for_the_shortest_way(Scene):
             00100
             """
         )
-
         return super().construct()
 
 class trying2(Scene) :
