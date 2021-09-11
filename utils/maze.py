@@ -1,4 +1,4 @@
-from manimlib.imports import *
+from manimlib import *
 from random import random, seed
 
 class DashedRectangle(VGroup):
@@ -61,7 +61,7 @@ class Maze(VGroup) :
         i = 0
         num_list = []
         for rec in self.rec_list :
-            num_list.append(TexMobject(str(i)))
+            num_list.append(Tex(str(i)))
             num_list[-1].scale(0.8*self.scale_factor)
             num_list[-1].move_to(rec.get_center())
             i += 1
@@ -87,7 +87,7 @@ class Maze(VGroup) :
 
     def set_bar(self, lin, col) :
         self.bar_poi_list.append((lin, col))
-        bar = TextMobject('\#')
+        bar = Text('#')
         bar.move_to(self.get_rec(lin, col))
         bar.scale(1.2*self.scale_factor)
         bar.set_color(YELLOW)
