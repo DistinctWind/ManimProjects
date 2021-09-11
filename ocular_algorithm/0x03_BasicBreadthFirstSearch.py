@@ -48,7 +48,20 @@ class IntroductionScene(Scene) :
                     
         return super().construct()
 
-class trying(Scene) :
+class trying2(Scene) :
+    def construct(self):
+        arrow = Arrow()
+        self.play(GrowArrow(arrow))
+        self.wait()
+        self.play(GrowArrow(arrow, rate_func=eat_it_back))
+
+        square = Square()
+        self.play(ShowCreation(square))
+        self.wait()
+        self.play(ShowCreation(square, rate_func=eat_it_back))
+        return super().construct()
+
+class trying1(Scene) :
     def construct(self):
         maze=Maze(5, 5)
         maze.set_start(3, 3)
