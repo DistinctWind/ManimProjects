@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 from manimlib import *
 from utils.imports import *
 
-class IntroductionScene(Scene) :
+class Introduction_scene(Scene) :
     def construct(self):
         title = Text("深度优先搜索", font="msyh")
         title.to_edge(UP)
@@ -58,7 +58,6 @@ class IntroductionScene(Scene) :
         dfs(*easy_maze.start)
         self.wait()
         self.play(FadeOut(arrow_group))
-
         return super().construct()
 
 class trying2(Scene) :
