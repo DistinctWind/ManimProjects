@@ -1,6 +1,8 @@
 import sys
 import os
 
+from numpy import left_shift
+
 sys.path.append(os.getcwd())
 
 from manimlib import *
@@ -58,6 +60,42 @@ class Introduction_scene(Scene) :
         dfs(*easy_maze.start)
         self.wait()
         self.play(FadeOut(arrow_group))
+        self.wait()
+
+        title.target=Text("深度优先搜索+最短路径问题", font="msyh").replace(title).scale(1.75)
+        
+        self.play(MoveToTarget(title))
+        self.wait()
+        self.play(poi.animate.move_to(easy_maze.get_rec(*easy_maze.start)))
+        self.wait()
+
+        path_1 = VGroup(
+            easy_maze.get_line(3, 3, LEFT),
+            easy_maze.get_line(3, 2, LEFT),
+            easy_maze.get_line(3, 1, DOWN),
+            easy_maze.get_line(4, 1, DOWN),
+        )
+        self.play(ShowCreation(path_1))
+        self.wait()
+
+        path_2 = VGroup(
+            easy_maze.get_line(3, 3, DOWN),
+            easy_maze.get_line(4, 3, RIGHT),
+            easy_maze.get_line(4, 4, RIGHT),
+            easy_maze.get_line(4, 5, UP),
+            easy_maze.get_line(3, 5, UP),
+            easy_maze.get_line(2, 5, UP),
+            easy_maze.get_line(1, 5, LEFT),
+            easy_maze.get_line(1, 4, LEFT),
+            easy_maze.get_line(1, 3, LEFT),
+            easy_maze.get_line(1, 2, LEFT),
+            easy_maze.get_line(1, 1, DOWN),
+            easy_maze.get_line(2, 1, DOWN),
+            easy_maze.get_line(3, 1, DOWN),
+            easy_maze.get_line(4, 1, DOWN)
+        ).set_color(RED)
+        self.play(ShowCreation(path_2))
+        self.wait()
         return super().construct()
 
 class trying2(Scene) :
