@@ -25,10 +25,11 @@ class IntroductionScene(Scene) :
         )
         self.play(ShowCreation(easy_maze))
         
-        poi = Dot().move_to(easy_maze.get_start(*easy_maze.start))
+        poi = Dot().move_to(easy_maze.get_rec(*easy_maze.start))
         self.play(ShowCreation(poi))
 
         search_order = easy_maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        arrow_group = VGroup()
         def dfs(lin, col) :
             if ((lin, col)==easy_maze.end):
                 return True
@@ -37,6 +38,7 @@ class IntroductionScene(Scene) :
                 ncol = col+mov_col
                 arrow = easy_maze.get_arrow(lin, col, direction)
                 if (easy_maze.judge(nlin, ncol)) :
+                    arrow_group.add(arrow)
                     self.play(
                         GrowArrow(arrow),
                         poi.animate.move_to(easy_maze.get_rec(nlin, ncol)),
@@ -45,7 +47,18 @@ class IntroductionScene(Scene) :
                     easy_maze.move_poi(nlin, ncol)
                     if dfs(nlin, ncol) :
                         return True
-                    
+                    self.play(
+                        Uncreate(arrow),
+                        poi.animate.move_to(easy_maze.get_rec(lin, col)),
+                        run_time=0.25, rate_func=linear
+                    )
+                    arrow_group.remove(arrow)
+            return False
+        
+        dfs(*easy_maze.start)
+        self.wait()
+        self.play(FadeOut(arrow_group))
+
         return super().construct()
 
 class trying2(Scene) :
@@ -53,7 +66,7 @@ class trying2(Scene) :
         arrow = Arrow()
         self.play(GrowArrow(arrow))
         self.wait()
-        self.play(GrowArrow(arrow, rate_func=eat_it_back))
+        self.play(GrowArrow(arrow), rate_func=eat_it_back)
 
         square = Square()
         self.play(ShowCreation(square))
