@@ -1,1 +1,1 @@
-from project.utils.maze import *
+from utils.maze import *

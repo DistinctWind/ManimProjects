@@ -1,5 +1,5 @@
-from manimlib.imports import *
-from project.utils.imports import *
+from manimlib import *
+from utils.imports import *
 
 class Begin_introduction(Scene) :
     def construct(self) :
@@ -148,12 +148,12 @@ class Show_path(Scene):
         search(*maze.start)
         cnt = 0
         text = Text('cnt = ',font='Microsoft YaHei', stroke_width=0).scale(0.5).to_corner(UL)
-        c = TexMobject('0', stroke_width=0)
+        c = Tex('0', stroke_width=0)
         c.next_to(text)
         self.play(Write(text), Write(c))
         for i in range(len(path_group)):
             cnt+=1
-            c.target = TexMobject(str(cnt), stroke_width=0).next_to(text)
+            c.target = Tex(str(cnt), stroke_width=0).next_to(text)
             if i>=1:
                 self.play(Uncreate(path_group[i-1]), run_time=0.25)
             self.play(ShowCreation(path_group[i]), MoveToTarget(c), run_time=0.25)
