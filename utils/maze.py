@@ -68,7 +68,7 @@ class Maze(VGroup) :
         self.add(*num_list)
 
     def set_start(self, lin, col) :
-        start_text = Text('S', font='courier', stroke_width=0)
+        start_text = Text('S', font='cour', stroke_width=0)
         start_text.move_to(self.get_rec(lin, col).get_center())
         start_text.scale(0.8*self.scale_factor)
         start_text.set_color(GREEN)
@@ -78,7 +78,7 @@ class Maze(VGroup) :
         self.add(start_text)
     
     def set_end(self, lin, col) :
-        end_text = Text('E', font='courier', stroke_width=0)
+        end_text = Text('E', font='cour', stroke_width=0)
         end_text.move_to(self.get_rec(lin, col).get_center())
         end_text.scale(0.8*self.scale_factor)
         end_text.set_color(RED)
@@ -87,7 +87,7 @@ class Maze(VGroup) :
 
     def set_bar(self, lin, col) :
         self.bar_poi_list.append((lin, col))
-        bar = Text('#')
+        bar = Text('#', font='cour', stroke_width=0)
         bar.move_to(self.get_rec(lin, col))
         bar.scale(1.2*self.scale_factor)
         bar.set_color(YELLOW)

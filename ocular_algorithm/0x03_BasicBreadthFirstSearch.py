@@ -8,6 +8,9 @@ from utils.imports import *
 
 class IntroductionScene(Scene) :
     def construct(self):
+        title = Text("深度优先搜索", font="msyh")
+        title.to_edge(UP)
+        self.play(Write(title))
         easy_maze = Maze(5, 5)
         easy_maze.set_start(3, 3)
         easy_maze.set_end(5, 1)
@@ -17,10 +20,32 @@ class IntroductionScene(Scene) :
             00110
             00010
             01000
-            00000
+            00100
             """
         )
         self.play(ShowCreation(easy_maze))
+        
+        poi = Dot().move_to(easy_maze.get_start(*easy_maze.start))
+        self.play(ShowCreation(poi))
+
+        search_order = easy_maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        def dfs(lin, col) :
+            if ((lin, col)==easy_maze.end):
+                return True
+            for mov_lin, mov_col, direction in search_order :
+                nlin = lin+mov_lin
+                ncol = col+mov_col
+                arrow = easy_maze.get_arrow(lin, col, direction)
+                if (easy_maze.judge(nlin, ncol)) :
+                    self.play(
+                        GrowArrow(arrow),
+                        poi.animate.move_to(easy_maze.get_rec(nlin, ncol)),
+                        run_time=0.25, rate_func=linear
+                    )
+                    easy_maze.move_poi(nlin, ncol)
+                    if dfs(nlin, ncol) :
+                        return True
+                    
         return super().construct()
 
 class trying(Scene) :
