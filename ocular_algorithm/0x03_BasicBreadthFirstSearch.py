@@ -1,4 +1,4 @@
-from re import search
+from re import L, search
 import sys
 import os
 import random
@@ -326,6 +326,24 @@ class Queue_introduction(Scene):
         pop_and_reset()
         pop_and_reset()
         pop_and_reset()
+        return super().construct()
+
+class Abstraction_introduction(Scene):
+    def construct(self):
+        title = Text("往队列里面放什么？", font='msyh')
+        self.play(Write(title))
+        self.wait(0.5)
+        self.play(title.animate.to_edge(UP))
+        dp=VirtualizedDataPack(1, 2, 3)
+        self.play(FadeIn(dp.circle, scale=0.75))
+        self.wait(0.5)
+        self.play(Write(dp.step_tag))
+        self.wait(0.5)
+        self.play(Write(dp.pos_tag))
+        self.wait(0.5)
+
+        ans = Text("变成数据包", font='msyh').next_to(dp, DOWN)
+        self.play(Write(ans))
         return super().construct()
 
 class Depth_first_search(Scene):

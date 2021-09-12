@@ -46,16 +46,16 @@ class data_pack:
 class VirtualizedDataPack(VGroup):
     def __init__(self, step, lin, col, **kwargs):
         super().__init__(**kwargs)
-        circle = Circle().set_color(BLUE).set_fill(BLUE, opacity=0.3).scale(1.5)
-        step_tag = Text('step='+str(step), font='msyh', color=YELLOW)
-        pos_tag = Text(
+        self.circle = Circle().set_color(BLUE).set_fill(BLUE, opacity=0.3).scale(1.5)
+        self.step_tag = Text('step='+str(step), font='msyh', color=YELLOW)
+        self.pos_tag = Text(
             '(%(lin)s, %(col)s)' % {"lin": str(lin), "col": str(col)},
             font='msyh'
         )
         VGroup(
-            step_tag, pos_tag
-        ).arrange(DOWN).move_to(circle.get_center())
+            self.step_tag, self.pos_tag
+        ).arrange(DOWN).move_to(self.circle.get_center())
         self.add(
-            VGroup(circle, step_tag, pos_tag).scale(0.75)
+            VGroup(self.circle, self.step_tag, self.pos_tag).scale(0.75)
         )
         
