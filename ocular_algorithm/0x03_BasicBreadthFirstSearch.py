@@ -1,6 +1,7 @@
 from re import search
 import sys
 import os
+import random
 
 sys.path.append(os.getcwd())
 
@@ -279,6 +280,12 @@ class Breadth_first_search(Scene):
 
 class Queue_introduction(Scene):
     def construct(self):
+        title = Text("队列", font='msyh')
+        self.play(Write(title))
+        self.wait()
+        self.play(title.animate.to_edge(UP))
+        self.wait()
+        
         
         return super().construct()
 
@@ -321,6 +328,17 @@ class Depth_first_search(Scene):
                     )
         dfs(*maze.start)
         
+        return super().construct()
+
+class trying5(Scene):
+    def construct(self):
+        # circle = Circle()
+        # self.add(circle)
+        for i in range(5):
+            circle = Circle()\
+            .set_color(get_random_color())\
+            .set_fill(get_random_color(), opacity=random.random())
+            self.play(FadeIn(circle, scale=random.random()*2))
         return super().construct()
 
 class trying4(Scene):
