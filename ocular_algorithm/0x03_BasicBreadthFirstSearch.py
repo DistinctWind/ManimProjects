@@ -363,18 +363,23 @@ class Normal_bfs(Scene):
             """
         )
         maze.shift(UP)
+        search_order = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
         self.play(ShowCreation(maze))
         self.wait()
 
         poi=Dot().move_to(maze.get_rec(*maze.start))
         self.play(FadeIn(poi, scale=0.75))
 
-        begin_pack = VirtualizedDataPack(0, *maze.start).to_corner(DL).scale(0.5)
-        q = VirtualizedQueue().to_edge(DOWN)
-        always(q.to_edge, DOWN)
+        begin_pack = data_pack(0, *maze.start)
+        vbegin_pack = VirtualizedDataPack(0, *maze.start).to_corner(DL).scale(0.5)
+        q = Queue()
+        vq = VirtualizedQueue().to_edge(DOWN)
+        always(vq.to_edge, DOWN)
+        
+        q.put(begin_pack)
         self.play(
-            FadeIn(q.put(begin_pack).to_corner(DR), RIGHT),
-            q.animate.arrange(RIGHT)
+            FadeIn(vq.put(vbegin_pack).to_corner(DR), RIGHT),
+            vq.animate.arrange(RIGHT)
         )
         self.wait()
 
@@ -382,6 +387,38 @@ class Normal_bfs(Scene):
         self.wait()
         self.play(poi.animate.move_to(maze.get_rec(2, 4)))
         self.wait()
+
+        def bfs():
+            opa = 0.1
+            maze.add_path_poi_list(*maze.start)
+            self.play(maze.get_rec(*maze.start).animate.set_fill(BLUE, opacity=opa), run_time=0.25)
+            opa+=0.1
+            while not q.empty():
+                now = q.pop()
+                arrow_group = VGroup()
+                self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
+                if ((now.lin, now.col)==maze.end):
+                    break
+                for mov_lin, mov_col, direction in search_order:
+                    nlin = now.lin+mov_lin
+                    ncol = now.col+mov_col
+                    arrow = maze.get_arrow(now.lin, now.col, direction)
+                    if (maze.judge(nlin, ncol)):
+                        arrow_group.add(arrow)
+                        maze.add_path_poi_list(nlin, ncol)
+                        self.play(
+                            poi.animate.move_to(maze.get_rec(nlin, ncol)),
+                            maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.1),
+                            GrowArrow(arrow),
+                            run_time=0.25
+                        )
+                        q.put(data_pack(now.step+1, nlin, ncol))
+                        self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)), run_time=0.25)
+                self.play(FadeOut(arrow_group, scale=0.5), run_time=0.25)
+        bfs()
+                        
+
+                
         return super().construct()
 
 class Depth_first_search(Scene):
