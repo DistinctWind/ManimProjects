@@ -323,6 +323,22 @@ class Depth_first_search(Scene):
         
         return super().construct()
 
+class trying4(Scene):
+    def construct(self):
+        virtualized_queue=VirtualizedQueue()
+        # data_pack = VirtualizedDataPack(1, 2, 3)
+        data_packs = VGroup(*[
+            VirtualizedDataPack(__step, 2, 5) for __step in range(1, 6)
+        ]).arrange(RIGHT)
+        # self.play(FadeIn(data_pack, scale=0.75))
+        # self.play(ShowCreation(data_packs))
+
+        for data_pack in data_packs:
+            data_pack.move_to(ORIGIN)
+            self.play(FadeIn(virtualized_queue.put(data_pack), scale=0.75))
+            self.play(virtualized_queue.animate.arrange(RIGHT))
+        return super().construct()
+
 class trying3(Scene) :
     def construct(self):
         square = Square()
