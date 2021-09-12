@@ -232,8 +232,8 @@ class Breadth_first_search(Scene):
         for rec in maze.rec_list:
             rec.target=rec.copy().set_fill(BLUE, opacity=0)
         self.play(
-            *[MoveToTarget(__rec) for __rec in maze.rec_list],
-            poi.animate.move_to(*maze.start)
+            poi.animate.move_to(maze.get_rec(*maze.start)),
+            *[MoveToTarget(__rec) for __rec in maze.rec_list]
         )
         return super().construct()
 
