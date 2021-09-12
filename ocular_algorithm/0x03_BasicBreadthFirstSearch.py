@@ -207,6 +207,7 @@ class Breadth_first_search(Scene):
             self.play(maze.get_rec(*maze.start).animate.set_fill(BLUE, opacity=opa), run_time=0.25)
             while not q.empty():
                 now = q.pop()
+                self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
                 print(str(now.lin)+' '+str(now.col)+':')
                 if ((now.lin, now.col)==maze.end):
                     break
@@ -214,8 +215,13 @@ class Breadth_first_search(Scene):
                     nlin, ncol = now.lin+mov_lin, now.col+mov_col
                     if (maze.judge(nlin, ncol)):
                         maze.add_path_poi_list(nlin, ncol)
-                        self.play(maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.1), run_time=0.25)
+                        self.play(
+                            poi.animate.move_to(maze.get_rec(nlin, ncol)),
+                            maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.1),
+                            run_time=0.25
+                        )
                         q.put(data_pack(now.step+1, nlin, ncol))
+                        self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)), run_time=0.25)
 
         bfs()
 
