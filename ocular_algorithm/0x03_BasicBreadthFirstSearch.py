@@ -1,8 +1,6 @@
 import sys
 import os
 
-from numpy import left_shift
-
 sys.path.append(os.getcwd())
 
 from manimlib import *
@@ -49,8 +47,9 @@ class Introduction_scene(Scene) :
                     easy_maze.move_poi(nlin, ncol)
                     if dfs(nlin, ncol) :
                         return True
+                    easy_maze.role_back()
                     self.play(
-                        Uncreate(arrow),
+                        FadeOut(arrow, scale=0.5),
                         poi.animate.move_to(easy_maze.get_rec(lin, col)),
                         run_time=0.25, rate_func=linear
                     )
@@ -96,6 +95,7 @@ class Introduction_scene(Scene) :
         ).set_color(RED)
         self.play(ShowCreation(path_2))
         self.wait()
+        self.play(FadeOut(title), FadeOut(path_1), FadeOut(path_2))
         return super().construct()
 
 class Depth_first_search_for_the_shortest_way(Scene):
@@ -112,6 +112,71 @@ class Depth_first_search_for_the_shortest_way(Scene):
             00100
             """
         )
+        self.add(maze)
+        poi=Dot().move_to(maze.get_rec(*maze.start))
+        self.add(poi)
+
+        arrow_group=VGroup()
+        path_and_tag_group=VGroup().to_corner(UL)
+        search_order = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        cnt=0
+        def dfs_for_the_shortest_way(lin, col, step):
+            if ((lin, col)==maze.end):
+                nonlocal cnt
+                cnt = cnt+1
+                tag=Text(
+                    '#'+str(cnt)+" step="+str(step), color=BLUE_A,
+                    t2c={
+                        "step=": YELLOW
+                    }
+                ).next_to(arrow_group, UP)
+                path_and_tag=VGroup(
+                    arrow_group.deepcopy(),
+                    tag
+                )
+                self.add(path_and_tag)
+                self.play(Write(tag))
+                path_and_tag.target=path_and_tag.copy().scale(0.25).to_corner(DL)
+                self.play(MoveToTarget(path_and_tag))
+                path_and_tag_group.add(path_and_tag)
+                self.play(
+                    # path_and_tag.animate.scale(0.25),
+                    path_and_tag_group.animate.arrange(DOWN).to_corner(UL)
+                )
+                self.wait()
+            for mov_lin, mov_col, direction in search_order:
+                nlin=lin+mov_lin
+                ncol=col+mov_col
+                arrow=maze.get_arrow(lin, col, direction)
+                if (maze.judge(nlin, ncol)) :
+                    arrow_group.add(arrow)
+                    self.play(
+                        GrowArrow(arrow),
+                        poi.animate.move_to(maze.get_rec(nlin, ncol)),
+                        run_time=0.25
+                    )
+                    maze.move_poi(nlin, ncol)
+                    dfs_for_the_shortest_way(nlin, ncol, step+1)
+                    maze.role_back()
+                    self.play(
+                        FadeOut(arrow, scale=0.5),
+                        poi.animate.move_to(maze.get_rec(lin, col)),
+                        run_time=0.25
+                    )
+                    arrow_group.remove(arrow)
+        dfs_for_the_shortest_way(*maze.start, 0)
+        self.play(FadeOut(maze), FadeOut(poi))
+        # path_and_tag_group.target=path_and_tag_group.copy().arrange(RIGHT).scale(4).move_to([0, 0, 0])
+        self.play(
+            path_and_tag_group.animate.arrange(RIGHT).scale(3.5).move_to([0, 0, 0])
+        )
+        self.wait()
+        
+        bingo=Text("✓", font='msyh')
+        bingo.next_to(path_and_tag_group[2], DOWN, buff=MED_SMALL_BUFF)
+        bingo.scale(1.5)
+        bingo.set_color(RED)
+        self.play(Write(bingo))
         return super().construct()
 
 class trying2(Scene) :
