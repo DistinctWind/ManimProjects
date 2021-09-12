@@ -236,6 +236,35 @@ class Depth_first_search(Scene):
         maze = Maze(3, 5)
         maze.set_start(1, 1)
         maze.set_end(3, 5)
+        self.play(ShowCreation(maze))
+        
+        poi = Dot().move_to(maze.get_rec(*maze.start))
+        self.play(FadeIn(poi, scale = 0.5))
+        search_order = maze.get_search_order(RIGHT, DOWN, LEFT, UP)
+
+        cnt=0
+        def dfs(lin, col):
+            if ((lin, col)==maze.end):
+                nonlocal cnt
+                cnt=cnt+1
+                print(cnt)
+                return
+            for mov_lin, mov_col, direction in search_order:
+                nlin, ncol = lin+mov_lin, col+mov_col
+                arrow = maze.get_arrow(lin, col, direction)
+                if (maze.judge(nlin, ncol)):
+                    self.play(
+                        poi.animate.move_to(maze.get_rec(nlin, ncol)),
+                        GrowArrow(arrow), run_time=0.25
+                    )
+                    maze.move_poi(nlin, ncol)
+                    dfs(nlin, ncol)
+                    maze.role_back()
+                    self.play(
+                        poi.animate.move_to(maze.get_rec(lin, col)),
+                        FadeOut(arrow), run_time=0.25
+                    )
+        dfs(*maze.start)
         
         return super().construct()
 
