@@ -1,3 +1,4 @@
+from re import search
 import sys
 import os
 
@@ -168,10 +169,10 @@ class Depth_first_search_for_the_shortest_way(Scene):
         self.play(FadeOut(maze), FadeOut(poi))
         # path_and_tag_group.target=path_and_tag_group.copy().arrange(RIGHT).scale(4).move_to([0, 0, 0])
         self.play(
-            path_and_tag_group.animate.arrange(RIGHT).scale(3.5).move_to([0, 0, 0])
+            path_and_tag_group.animate.arrange(RIGHT).scale(3.5).move_to(ORIGIN)
         )
         self.wait()
-        
+
         bingo=Text("✓", font='msyh')
         bingo.next_to(path_and_tag_group[2], DOWN, buff=MED_SMALL_BUFF)
         bingo.scale(1.5)
@@ -179,6 +180,54 @@ class Depth_first_search_for_the_shortest_way(Scene):
         self.play(Write(bingo))
         return super().construct()
 
+class Breadth_first_search(Scene):
+    def construct(self):
+        title = Text("广度优先搜索", font='msyh')
+        self.play(Write(title))
+        self.wait()
+        subtitle = Text("广搜", font='msyh').scale(0.75).set_color(GREY).next_to(title, DOWN)
+        self.play(Write(subtitle))
+
+        self.play(
+            title.animate.to_edge(UP),
+            FadeOut(subtitle, DOWN, scale=0.5)
+        )
+        
+        maze = Maze(3, 5)
+        maze.set_start(1, 1)
+        maze.set_end(3, 5)
+        poi = Dot().move_to(maze.get_rec(*maze.start))
+        self.play(ShowCreation(maze), FadeIn(poi, scale=0.5))
+        q = queue()
+        q.put(data_pack(0, *maze.start))
+        search_order = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
+        opa=0.1
+        def bfs():
+            maze.add_path_poi_list(*maze.start)
+            self.play(maze.get_rec(*maze.start).animate.set_fill(BLUE, opacity=opa), run_time=0.25)
+            while not q.empty():
+                now = q.pop()
+                print(str(now.lin)+' '+str(now.col)+':')
+                if ((now.lin, now.col)==maze.end):
+                    break
+                for mov_lin, mov_col, direction in search_order:
+                    nlin, ncol = now.lin+mov_lin, now.col+mov_col
+                    if (maze.judge(nlin, ncol)):
+                        maze.add_path_poi_list(nlin, ncol)
+                        self.play(maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.1), run_time=0.25)
+                        q.put(data_pack(now.step+1, nlin, ncol))
+
+        bfs()
+
+        return super().construct()
+
+class trying3(Scene) :
+    def construct(self):
+        square = Square()
+        square.set_fill(BLUE, opacity=1)
+        self.play(ShowCreation(square))
+        
+        return super().construct()
 class trying2(Scene) :
     def construct(self):
         arrow = Arrow()

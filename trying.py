@@ -18,3 +18,13 @@ class RecallingMaze(Scene) :
         self.play(FadeIn(poi, scale=0.5))
         
         return super().construct()
+
+class try_playing_together(Scene):
+    def construct(self):
+        text = Text('text')
+        self.add(text)
+        self.play(
+            text.animate.set_color(RED),
+            self.camera.frame.animate.scale(0.5)
+        )
+        return super().construct()
