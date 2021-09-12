@@ -229,7 +229,12 @@ class Breadth_first_search(Scene):
                 self.play(FadeOut(arrow_group, scale=0.5), run_time=0.25)
 
         bfs()
-
+        for rec in maze.rec_list:
+            rec.target=rec.copy().set_fill(BLUE, opacity=0)
+        self.play(
+            *[MoveToTarget(__rec) for __rec in maze.rec_list],
+            poi.animate.move_to(*maze.start)
+        )
         return super().construct()
 
 class Depth_first_search(Scene):
