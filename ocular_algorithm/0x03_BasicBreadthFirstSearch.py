@@ -221,6 +221,18 @@ class Breadth_first_search(Scene):
 
         return super().construct()
 
+class Depth_first_search(Scene):
+    def construct(self):
+        title = Text("深度优先搜索", font='msyh')
+        title.to_edge(UP)
+        self.play(Write(title))
+        
+        maze = Maze(3, 5)
+        maze.set_start(1, 1)
+        maze.set_end(3, 5)
+        
+        return super().construct()
+
 class trying3(Scene) :
     def construct(self):
         square = Square()
