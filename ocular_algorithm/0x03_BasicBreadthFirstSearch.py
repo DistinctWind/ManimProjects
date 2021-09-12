@@ -383,19 +383,31 @@ class Normal_bfs(Scene):
         )
         self.wait()
 
+        opa = 0.1
         self.play(poi.animate.move_to(maze.get_rec(3, 4)))
         self.wait()
         self.play(poi.animate.move_to(maze.get_rec(2, 4)))
         self.wait()
+        self.play(poi.animate.move_to(maze.get_rec(*maze.start)))
+        self.play(maze.get_rec(*maze.start).animate.set_fill(BLUE, opacity=opa), run_time=0.25)
+        self.wait()
 
         def bfs():
-            opa = 0.1
             maze.add_path_poi_list(*maze.start)
-            self.play(maze.get_rec(*maze.start).animate.set_fill(BLUE, opacity=opa), run_time=0.25)
-            opa+=0.1
             while not q.empty():
                 now = q.pop()
                 arrow_group = VGroup()
+                self.play(
+                    FadeOut(vq[0], shift=LEFT), 
+                    run_time=0.25
+                )
+                vnow = vq[0].copy().scale(2).move_to(LEFT_SIDE+RIGHT*2)
+                vq.pop()
+                self.play(
+                    FadeIn(vnow, scale=1.5),
+                    vq.animate.arrange(RIGHT),
+                    run_time=0.25
+                )
                 self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
                 if ((now.lin, now.col)==maze.end):
                     break
@@ -403,18 +415,21 @@ class Normal_bfs(Scene):
                     nlin = now.lin+mov_lin
                     ncol = now.col+mov_col
                     arrow = maze.get_arrow(now.lin, now.col, direction)
+                    vp=VirtualizedDataPack(now.step+1, nlin, ncol)
                     if (maze.judge(nlin, ncol)):
                         arrow_group.add(arrow)
                         maze.add_path_poi_list(nlin, ncol)
                         self.play(
                             poi.animate.move_to(maze.get_rec(nlin, ncol)),
-                            maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.1),
+                            maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.2),
                             GrowArrow(arrow),
                             run_time=0.25
                         )
                         q.put(data_pack(now.step+1, nlin, ncol))
+                        self.play(FadeIn(vq.put(vp).scale(0.5).to_corner(DR), scale=0.5), run_time=0.25)
+                        self.play(vq.animate.arrange(RIGHT), run_time=0.25)
                         self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)), run_time=0.25)
-                self.play(FadeOut(arrow_group, scale=0.5), run_time=0.25)
+                self.play(FadeOut(arrow_group, scale=0.5), FadeOut(vnow), run_time=0.25)
         bfs()
                         
 
