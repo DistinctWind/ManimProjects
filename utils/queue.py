@@ -26,7 +26,7 @@ class VirtualizedQueue(VGroup):
     def put(self, item):
         tag = Text(str(self.num), font='msyh')
         self.num+=1
-        item_and_tag = VGroup(item, tag).arrange(DOWN, buff=MED_SMALL_BUFF)
+        item_and_tag = VGroup(item, tag).arrange(UL, buff=0.1)
         self.add(item_and_tag)
         self.object_list.append(item_and_tag)
         self.len+=1

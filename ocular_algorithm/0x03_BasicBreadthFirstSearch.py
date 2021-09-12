@@ -286,7 +286,46 @@ class Queue_introduction(Scene):
         self.play(title.animate.to_edge(UP))
         self.wait()
         
+        circle_list = [
+            Circle()\
+                .set_color(get_random_color())\
+                .set_fill(get_random_color(), opacity=random.random())\
+                .to_edge(RIGHT)\
+                for i in range(5)
+        ]
+        circle_queue = VirtualizedQueue()
         
+        for circle in circle_list:
+            self.play(
+                FadeIn(circle_queue.put(circle).to_edge(RIGHT), scale=0.75),
+                circle_queue.animate.arrange(RIGHT)
+            )
+        
+        new_circle = Circle()\
+            .set_color(get_random_color())\
+            .set_fill(get_random_color(), opacity=random.random())\
+            .to_edge(RIGHT)
+
+        def pop_and_reset():
+            self.play(
+                FadeOut(circle_queue[0], shift=LEFT)
+            )
+            circle_queue.pop()
+            self.play(
+                circle_queue.animate.move_to(ORIGIN)
+            )
+            self.wait()
+            
+        pop_and_reset()
+        pop_and_reset()
+        self.play(
+            FadeIn(circle_queue.put(new_circle).to_edge(RIGHT), scale=0.75),
+            circle_queue.animate.arrange(RIGHT)
+        )
+        pop_and_reset()
+        pop_and_reset()
+        pop_and_reset()
+        pop_and_reset()
         return super().construct()
 
 class Depth_first_search(Scene):
