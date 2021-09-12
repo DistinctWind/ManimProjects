@@ -3,6 +3,8 @@ import sys
 import os
 import random
 
+from numpy import dot
+
 sys.path.append(os.getcwd())
 
 from manimlib import *
@@ -344,6 +346,42 @@ class Abstraction_introduction(Scene):
 
         ans = Text("变成数据包", font='msyh').next_to(dp, DOWN)
         self.play(Write(ans))
+        return super().construct()
+
+class Normal_bfs(Scene):
+    def construct(self):
+        maze = Maze(5, 5)
+        maze.set_start(3, 3)
+        maze.set_end(2, 4)
+        maze.set_bar_by_str(
+            """
+            00000
+            00000
+            10010
+            00000
+            00100
+            """
+        )
+        maze.shift(UP)
+        self.play(ShowCreation(maze))
+        self.wait()
+
+        poi=Dot().move_to(maze.get_rec(*maze.start))
+        self.play(FadeIn(poi, scale=0.75))
+
+        begin_pack = VirtualizedDataPack(0, *maze.start).to_corner(DL).scale(0.5)
+        q = VirtualizedQueue().to_edge(DOWN)
+        always(q.to_edge, DOWN)
+        self.play(
+            FadeIn(q.put(begin_pack).to_corner(DR), RIGHT),
+            q.animate.arrange(RIGHT)
+        )
+        self.wait()
+
+        self.play(poi.animate.move_to(maze.get_rec(3, 4)))
+        self.wait()
+        self.play(poi.animate.move_to(maze.get_rec(2, 4)))
+        self.wait()
         return super().construct()
 
 class Depth_first_search(Scene):
