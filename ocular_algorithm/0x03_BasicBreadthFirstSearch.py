@@ -232,9 +232,49 @@ class Breadth_first_search(Scene):
         for rec in maze.rec_list:
             rec.target=rec.copy().set_fill(BLUE, opacity=0)
         self.play(
-            poi.animate.move_to(maze.get_rec(*maze.start)),
+            FadeOut(poi, scale=0.5),
             *[MoveToTarget(__rec) for __rec in maze.rec_list]
         )
+
+        subtitle = Text("（理想状况）", font='msyh').scale(0.75).set_color(GREY)
+        subtitle.next_to(title, DOWN, buff=SMALL_BUFF)
+        self.play(Write(subtitle))
+
+        change_lists = [
+            [
+                maze.get_rec(1, 1),
+            ],
+            [
+                maze.get_rec(1, 2),
+                maze.get_rec(2, 1),
+            ],
+            [
+                maze.get_rec(1, 3),
+                maze.get_rec(2, 2),
+                maze.get_rec(3, 1),
+            ],
+            [
+                maze.get_rec(1, 4),
+                maze.get_rec(2, 3),
+                maze.get_rec(3, 2),
+            ],
+            [
+                maze.get_rec(1, 5),
+                maze.get_rec(2, 4),
+                maze.get_rec(3, 3),
+            ],
+            [
+                maze.get_rec(2, 5),
+                maze.get_rec(3, 4),
+            ],
+            [
+                maze.get_rec(3, 5),
+            ]
+        ]
+        opa=0.3
+        for change_list in change_lists:
+            self.play(*[__rec.animate.set_fill(BLUE, opacity=opa) for __rec in change_list])
+            opa+=0.1
         return super().construct()
 
 class Depth_first_search(Scene):
