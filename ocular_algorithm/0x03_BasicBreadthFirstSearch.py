@@ -198,7 +198,7 @@ class Breadth_first_search(Scene):
         maze.set_end(3, 5)
         poi = Dot().move_to(maze.get_rec(*maze.start))
         self.play(ShowCreation(maze), FadeIn(poi, scale=0.5))
-        q = queue()
+        q = Queue()
         q.put(data_pack(0, *maze.start))
         search_order = maze.get_search_order(UP, RIGHT, DOWN, LEFT)
         opa=0.1
@@ -275,6 +275,11 @@ class Breadth_first_search(Scene):
         for change_list in change_lists:
             self.play(*[__rec.animate.set_fill(BLUE, opacity=opa) for __rec in change_list])
             opa+=0.1
+        return super().construct()
+
+class Queue_introduction(Scene):
+    def construct(self):
+        
         return super().construct()
 
 class Depth_first_search(Scene):
