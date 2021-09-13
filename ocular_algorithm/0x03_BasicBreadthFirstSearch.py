@@ -341,7 +341,10 @@ class Abstraction_introduction(Scene):
         self.wait(0.5)
         self.play(Write(dp.step_tag))
         self.wait(0.5)
-        self.play(Write(dp.pos_tag))
+        pos_introduction = Text("（行，列）", font='msyh').next_to(dp.step_tag, DOWN).scale(0.75)
+        self.play(Write(pos_introduction))
+        self.wait()
+        self.play(ReplacementTransform(pos_introduction, dp.pos_tag))
         self.wait(0.5)
 
         ans = Text("变成数据包", font='msyh').next_to(dp, DOWN)
@@ -399,14 +402,12 @@ class Normal_bfs(Scene):
                 arrow_group = VGroup()
                 self.play(
                     FadeOut(vq[0], shift=LEFT), 
-                    run_time=0.25
                 )
                 vnow = vq[0].copy().scale(2).move_to(LEFT_SIDE+RIGHT*2)
                 vq.pop()
                 self.play(
                     FadeIn(vnow, scale=1.5),
                     vq.animate.arrange(RIGHT),
-                    run_time=0.25
                 )
                 self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
                 if ((now.lin, now.col)==maze.end):
@@ -421,19 +422,17 @@ class Normal_bfs(Scene):
                         maze.add_path_poi_list(nlin, ncol)
                         self.play(
                             poi.animate.move_to(maze.get_rec(nlin, ncol)),
-                            maze.get_rec(nlin, ncol).animate.set_fill(BLUE, opacity=opa+(now.step+1)*0.2),
+                            maze.get_rec(nlin, ncol).animate.set_fill(BLUE_E, opacity=opa+(now.step+1)*0.3),
                             GrowArrow(arrow),
                             run_time=0.25
                         )
                         q.put(data_pack(now.step+1, nlin, ncol))
-                        self.play(FadeIn(vq.put(vp).scale(0.5).to_corner(DR), scale=0.5), run_time=0.25)
-                        self.play(vq.animate.arrange(RIGHT), run_time=0.25)
+                        self.play(FadeIn(vq.put(vp).scale(0.5).to_corner(DR), scale=0.5))
+                        self.play(vq.animate.arrange(RIGHT))
                         self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)), run_time=0.25)
                 self.play(FadeOut(arrow_group, scale=0.5), FadeOut(vnow), run_time=0.25)
         bfs()
-                        
-
-                
+              
         return super().construct()
 
 class Depth_first_search(Scene):
