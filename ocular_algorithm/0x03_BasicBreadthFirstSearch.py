@@ -616,6 +616,13 @@ class Depth_first_search(Scene):
         
         return super().construct()
 
+class trying7(Scene):
+    def construct(self):
+        arrow = Arrow().set_color([BLUE, RED])
+        self.play(ShowCreation(arrow))
+        self.play(FadeOut(arrow))
+        return super().construct()
+
 class trying6(Scene):
     def construct(self):
         line = Line()
