@@ -4,10 +4,11 @@ import sys
 import os
 import random
 from sysconfig import get_path
-from matplotlib.pyplot import step, text
+from matplotlib.pyplot import arrow, step, text
 
 from numpy import dot
 from prompt_toolkit.key_binding.bindings.named_commands import downcase_word
+from pyrr.rectangle import right
 
 sys.path.append(os.getcwd())
 
@@ -558,6 +559,20 @@ class Strange_bfs(Scene):
 
 class End_introduction(Scene):
     def construct(self):
+        lines = VGroup(
+            VGroup(
+                Text("广搜", font='msyh').set_color(BLUE),
+                Arrow().set_color([BLUE, RED]),
+                Text("最短路", font='msyh').set_color(RED),
+            ).arrange(RIGHT),
+            Text("其他最短路算法:", font='msyh'),
+            Text("SPFA").set_color(BLUE),
+            Text("Dijkstra").set_color(BLUE)
+        ).arrange(DOWN, buff=MED_SMALL_BUFF)
+        for line in lines:
+            self.play(ShowCreation(line))
+            self.wait()
+        
         return super().construct()
 
 class Depth_first_search(Scene):
@@ -599,6 +614,13 @@ class Depth_first_search(Scene):
                     )
         dfs(*maze.start)
         
+        return super().construct()
+
+class trying6(Scene):
+    def construct(self):
+        line = Line()
+        VGroup(line).set_color_by_gradient(BLUE, RED)
+        self.add(line)
         return super().construct()
 
 class trying5(Scene):
