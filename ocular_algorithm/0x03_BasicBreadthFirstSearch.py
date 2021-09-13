@@ -3,8 +3,11 @@ from re import L, search
 import sys
 import os
 import random
+from sysconfig import get_path
+from matplotlib.pyplot import step, text
 
 from numpy import dot
+from prompt_toolkit.key_binding.bindings.named_commands import downcase_word
 
 sys.path.append(os.getcwd())
 
@@ -438,7 +441,11 @@ class Normal_bfs(Scene):
 
 class Strange_bfs(Scene):
     def construct(self):
-        maze = Maze(9, 10, scale_factor=0.75)
+        title = Text("广搜插队算法", font='msyh').set_color(YELLOW).to_edge(LEFT)
+        self.play(Write(title))
+        self.wait()
+
+        maze = Maze(9, 10, scale_factor=0.75).to_corner(UR, buff=MED_SMALL_BUFF)
         maze.set_start(5, 1)
         maze.set_end(5, 10)
         maze.set_bar_by_str(
@@ -468,15 +475,22 @@ class Strange_bfs(Scene):
         def calc_dis(lin, col):
             return sqrt(abs(lin-maze.end[0])**2+abs(col-maze.end[1])**2)
 
-        def strange_bfs(cut, color):
+        def strange_bfs(enable_cut_in, color):
             q = Queue()
             start_data_pack = data_pack(0, *maze.start, calc_dis(*maze.start), [maze.start])
             q.put(start_data_pack)
+
+            step_tag = Text("step=0").next_to(title, DOWN).match_style(title)
+            self.play(Write(step_tag), run_time=0.25)
+            step_tag.target=step_tag.copy()
+
             while not q.empty():
                 now = q.pop()
+                self.play(MoveToTarget(step_tag), run_time=0.25)
+                step_tag.target = Text("step="+str(now.step)).next_to(title, DOWN).match_style(title)
                 if ((now.lin, now.col)==maze.end):
                     self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col).get_center()+LEFT*0.01))
-                    return now
+                    return now, step_tag
                 else :
                     self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
                 arrow_group = VGroup()
@@ -496,12 +510,13 @@ class Strange_bfs(Scene):
                             run_time=0.5
                         )
                         q.put(data_pack(now.step+1, nlin, ncol, calc_dis(nlin, ncol), npath_list))
-                        if (cut):
+                        if (enable_cut_in):
                             q.data.sort(key=lambda x:x.dis)
                         # self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
                 self.play(FadeOut(arrow_group, scale=0.5), run_time=0.5)
         
-        res = strange_bfs(True, YELLOW)
+        res, step_tag = strange_bfs(True, YELLOW)
+        maze.clear_path_poi_list()
         print(res.path_list)
 
         def get_path_group(res):
@@ -514,10 +529,35 @@ class Strange_bfs(Scene):
             return path_group
 
         path_group = get_path_group(res)
+        # step_tag = Text("step="+str(len(res.path_list)-1), font='msyh').match_style(title).next_to(title, DOWN)
         for arrow in path_group:
             self.play(GrowArrow(arrow), run_time=0.25, rate_func=linear)
-            
+        self.wait()
+        # self.play(Write(step_tag))
+        # self.wait()
 
+        self.play(
+            FadeOut(path_group), FadeOut(step_tag),
+            *[
+                __rec.animate.set_fill(BLUE, opacity=0) for __rec in maze.rec_list
+            ],
+            poi.animate.move_to(maze.get_rec(*maze.start))
+        )
+        
+        title.target = Text("正常广搜算法", font='msyh').set_color(GREEN).to_edge(LEFT)
+        self.play(MoveToTarget(title))
+        res, step_tag = strange_bfs(False, GREEN)
+        path_group = get_path_group(res)
+        for arrow in path_group:
+            self.play(GrowArrow(arrow), run_time=0.25)
+        self.wait()
+        # step_tag = Text("step="+str(len(res.path_list)-1), font='msyh').match_style(title).next_to(title, DOWN)
+        # self.play(Write(step_tag))
+
+        return super().construct()
+
+class End_introduction(Scene):
+    def construct(self):
         return super().construct()
 
 class Depth_first_search(Scene):

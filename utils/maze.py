@@ -126,6 +126,9 @@ class Maze(VGroup) :
     
     def add_path_poi_list(self, lin, col):
         self.path_poi_list.append((lin, col))
+    
+    def clear_path_poi_list(self):
+        self.path_poi_list = [self.start]
 
     def move_poi(self, lin, col) :
         self.loc = (lin, col)
