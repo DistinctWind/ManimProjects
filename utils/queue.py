@@ -38,10 +38,12 @@ class VirtualizedQueue(VGroup):
         return self
 
 class data_pack:
-    def __init__(self, step, lin, col):
+    def __init__(self, step, lin, col, dis=-1, paths=None):
         self.step=step
         self.lin=lin
         self.col=col
+        self.dis=dis
+        self.path_list = paths
 
 class VirtualizedDataPack(VGroup):
     def __init__(self, step, lin, col, **kwargs):

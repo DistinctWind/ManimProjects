@@ -1,3 +1,4 @@
+from math import sqrt
 from re import L, search
 import sys
 import os
@@ -424,15 +425,99 @@ class Normal_bfs(Scene):
                             poi.animate.move_to(maze.get_rec(nlin, ncol)),
                             maze.get_rec(nlin, ncol).animate.set_fill(BLUE_E, opacity=opa+(now.step+1)*0.3),
                             GrowArrow(arrow),
-                            run_time=0.25
+                            run_time=0.5
                         )
                         q.put(data_pack(now.step+1, nlin, ncol))
                         self.play(FadeIn(vq.put(vp).scale(0.5).to_corner(DR), scale=0.5))
                         self.play(vq.animate.arrange(RIGHT))
-                        self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)), run_time=0.25)
-                self.play(FadeOut(arrow_group, scale=0.5), FadeOut(vnow), run_time=0.25)
+                        self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)), run_time=0.5)
+                self.play(FadeOut(arrow_group, scale=0.5), FadeOut(vnow), run_time=0.5)
         bfs()
               
+        return super().construct()
+
+class Strange_bfs(Scene):
+    def construct(self):
+        maze = Maze(9, 10, scale_factor=0.75)
+        maze.set_start(5, 1)
+        maze.set_end(5, 10)
+        maze.set_bar_by_str(
+            """
+            0000000000
+            0111111100
+            0000000100
+            0000000100
+            0000000100
+            0000000100
+            0000000100
+            0111111100
+            0000000000
+            """
+        )
+        search_order = maze.get_search_order(RIGHT, DOWN, LEFT, UP)
+
+        poi = Dot().set_color(RED).move_to(maze.get_rec(*maze.start))
+        self.play(ShowCreation(maze))
+        self.wait()
+        self.play(FadeIn(poi, scale=0.75), run_time=0.5)
+        self.wait()
+        connect_poi_and_end = always_redraw(DashedLine, poi, maze.get_rec(*maze.end).get_center(), color=RED_A)
+        self.play(ShowCreation(connect_poi_and_end))
+        self.wait()
+
+        def calc_dis(lin, col):
+            return sqrt(abs(lin-maze.end[0])**2+abs(col-maze.end[1])**2)
+
+        def strange_bfs(cut, color):
+            q = Queue()
+            start_data_pack = data_pack(0, *maze.start, calc_dis(*maze.start), [maze.start])
+            q.put(start_data_pack)
+            while not q.empty():
+                now = q.pop()
+                if ((now.lin, now.col)==maze.end):
+                    self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col).get_center()+LEFT*0.01))
+                    return now
+                else :
+                    self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
+                arrow_group = VGroup()
+                for mov_lin, mov_col, direction in search_order:
+                    nlin = now.lin+mov_lin
+                    ncol = now.col+mov_col 
+                    arrow = maze.get_arrow(now.lin, now.col, direction)
+                    npath_list = now.path_list.copy()
+                    npath_list.append((nlin, ncol))
+                    if maze.judge(nlin, ncol):
+                        arrow_group.add(arrow)
+                        maze.add_path_poi_list(nlin, ncol)
+                        self.play(
+                            # poi.animate.move_to(maze.get_rec(nlin, ncol)),
+                            maze.get_rec(nlin, ncol).animate.set_fill(color, opacity=(now.step+1)*0.05),
+                            GrowArrow(arrow),
+                            run_time=0.5
+                        )
+                        q.put(data_pack(now.step+1, nlin, ncol, calc_dis(nlin, ncol), npath_list))
+                        if (cut):
+                            q.data.sort(key=lambda x:x.dis)
+                        # self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
+                self.play(FadeOut(arrow_group, scale=0.5), run_time=0.5)
+        
+        res = strange_bfs(True, YELLOW)
+        print(res.path_list)
+
+        def get_path_group(res):
+            path_group = VGroup()
+            for i in range(len(res.path_list)-1):
+                start = maze.get_rec(*res.path_list[i]).get_center()
+                end = maze.get_rec(*res.path_list[i+1]).get_center()
+                arrow = Arrow(start, end, buff=0).set_color(BLUE)
+                path_group.add(arrow)
+            return path_group
+
+        path_group = get_path_group(res)
+        for arrow in path_group:
+            self.play(GrowArrow(arrow), run_time=0.25, rate_func=linear)
+            
+
         return super().construct()
 
 class Depth_first_search(Scene):
