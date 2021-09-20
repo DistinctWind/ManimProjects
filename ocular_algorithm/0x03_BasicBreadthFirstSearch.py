@@ -487,13 +487,13 @@ class Strange_bfs(Scene):
 
             while not q.empty():
                 now = q.pop()
-                self.play(MoveToTarget(step_tag), run_time=0.25)
-                step_tag.target = Text("step="+str(now.step)).next_to(title, DOWN).match_style(title)
                 if ((now.lin, now.col)==maze.end):
                     self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col).get_center()+LEFT*0.01))
                     return now, step_tag
                 else :
                     self.play(poi.animate.move_to(maze.get_rec(now.lin, now.col)))
+                self.play(MoveToTarget(step_tag), run_time=0.25)
+                step_tag.target = Text("step="+str(now.step+1)).next_to(title, DOWN).match_style(title)
                 arrow_group = VGroup()
                 for mov_lin, mov_col, direction in search_order:
                     nlin = now.lin+mov_lin
@@ -596,7 +596,10 @@ class Depth_first_search(Scene):
                 nonlocal cnt
                 cnt=cnt+1
                 print(cnt)
-                return
+                if (cnt>=20):
+                    return True
+                else :
+                    return False
             for mov_lin, mov_col, direction in search_order:
                 nlin, ncol = lin+mov_lin, col+mov_col
                 arrow = maze.get_arrow(lin, col, direction)
@@ -606,7 +609,8 @@ class Depth_first_search(Scene):
                         GrowArrow(arrow), run_time=0.25
                     )
                     maze.move_poi(nlin, ncol)
-                    dfs(nlin, ncol)
+                    if dfs(nlin, ncol):
+                        return True
                     maze.role_back()
                     self.play(
                         poi.animate.move_to(maze.get_rec(lin, col)),
