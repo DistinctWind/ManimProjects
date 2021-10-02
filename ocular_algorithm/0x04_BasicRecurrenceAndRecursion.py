@@ -51,6 +51,11 @@ class BeginningIntroduction(Scene):
 
 class RecurrenceFibIntroduction(Scene):
     def construct(self):
+        title = Text("斐波那契数列", font='DengXian')
+        self.play(Write(title))
+        subtitle = Text("Fibonacci", font='DengXian')
+        subtitle.next_to(title, DOWN)
+        self.play(title.animate.to_edge(UP).scale(0.75))
         seq=Sequence(10, 1, 1)
         self.play(ShowCreation(seq))
         return super().construct()
@@ -59,4 +64,11 @@ class trying1(Scene):
     def construct(self):
         tex = Tex("a=1")
         self.play(Write(tex))
+        return super().construct()
+
+class trying2(Scene):
+    def construct(self):
+        seq=Sequence(10, 1, 1)
+        self.play(ShowCreation(seq))
+        self.play(*seq.activate(3))
         return super().construct()
