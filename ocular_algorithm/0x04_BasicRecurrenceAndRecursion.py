@@ -68,17 +68,19 @@ class RecurrenceFibIntroduction(Scene):
     def construct(self):
         title = Text("斐波那契数列", font='DengXian')
         self.play(Write(title))
+        self.wait()
         subtitle = Text("Fibonacci", font='DengXian')
         subtitle.next_to(title, DOWN)
-        subtitle.target = Text("Fib", font='DengXian')
+        self.play(Write(subtitle))
+        subtitle.target = Text("Fib", font='DengXian').next_to(title, DOWN)
         self.play(MoveToTarget(subtitle))
         self.wait()
-        subtitle.target = Text("fib", font='DengXian')
+        subtitle.target = Text("fib", font='DengXian').next_to(title, DOWN)
         self.play(MoveToTarget(subtitle))
         self.wait()
         self.play(FadeOut(subtitle))
         self.wait()
-        
+
         self.play(title.animate.to_edge(UP).scale(0.75))
         seq=Sequence(10, 1, 1)
         self.play(ShowCreation(seq))
