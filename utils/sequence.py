@@ -5,7 +5,7 @@ class Cell(VGroup):
         super().__init__()
 
         self.num = Tex(str(n))
-        self.rec = SurroundingRectangle(self.num, buff=MED_SMALL_BUFF)
+        self.rec = SurroundingRectangle(self.num, buff=MED_SMALL_BUFF).set_color(WHITE)
         self.tag = Text(str(tag_num), font='Microsoft YaHei').scale(0.5)\
             .next_to(self.rec, DOWN, buff=MED_SMALL_BUFF)
         self.add(self.num, self.rec, self.tag)
@@ -17,8 +17,23 @@ class Cell(VGroup):
             MoveToTarget(self.num), 
             MoveToTarget(self.rec), 
             self.tag.animate.next_to(self.rec, DOWN, buff=MED_SMALL_BUFF)
-        ]
+            ]
 
+class Sequence(VGroup):
+    def __init__(self, seq):
+        super().__init__()
+        self.seq = seq
+        self.cells = []
+        for num in self.seq:
+            self.cells.append(Cell(num, self.seq.index(num)+1))
+        self.arrow = Arrow(UP*0.75, DOWN*0.75)
+        self.add(*self.cells)
+        self.arrange(RIGHT)
+        self.arrow.next_to(self.cells[0], UP)
+
+    def move_arrow(self, num):
+        return self.arrow.animate.next_to(self.cells[num-1], UP)
+    
 class oldSequence(VGroup):
     """This class is forbidden for its fool"""
     def __init__(self, len, width, height):

@@ -107,3 +107,12 @@ class trying3(Scene):
         self.play(ShowCreation(cell))
         self.play(*cell.write(1))
         return super().construct()
+
+class trying4(Scene):
+    def construct(self):
+        seq = Sequence([1, 3, 5, 2, 4, 6])
+        self.play(ShowCreation(seq))
+        self.play(GrowArrow(seq.arrow))
+        self.play(seq.move_arrow(1))
+        self.play(seq.move_arrow(3))
+        return super().construct()
