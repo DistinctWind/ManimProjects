@@ -3,6 +3,8 @@ from manimlib import *
 import sys
 import os
 
+from tqdm.std import tqdm
+
 sys.path.append(os.getcwd())
 
 from utils.imports import *
@@ -44,6 +46,19 @@ class BeginningIntroduction(Scene):
             RecurrenceFormula.animate.move_to(ORIGIN)
         )
         self.wait()
+        
+        Fib = [1, 1]
+        for i in range(2, 2022):
+            Fib.append(Fib[i-1]+Fib[i-2])
+        Fib_eq = []
+        for i in tqdm(range(2021)):
+            Fib_eq.append(Text("a["+str(i+1)+"]"))
+        VGroup(*Fib_eq).arrange(DOWN).next_to(RecurrenceFormula, DOWN)
+        self.play(*[Write(_Fib_eq) for _Fib_eq in Fib_eq], run_time=2)
+        self.wait()
+        self.play(self.camera.frame.animate.move_to(Fib_eq[-1].get_center()), run_time=10)
+        self.wait()
+
         self.play(*[FadeOut(_mobjects) for _mobjects in self.mobjects])
         self.wait()
 
