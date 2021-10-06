@@ -1,4 +1,4 @@
-from manimlib.imports import *
+from manimlib import *
 from numpy import *
 class BeginScene(Scene) :
     def construct(self) :

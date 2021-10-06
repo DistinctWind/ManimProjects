@@ -1,6 +1,17 @@
 from manimlib import *
 
-class Sequence(VGroup):
+class Cell(VGroup):
+    def __init__(self, n, tag_num):
+        super().__init__()
+
+        self.num = Tex(str(n))
+        self.rec = SurroundingRectangle(self.num, buff=MED_SMALL_BUFF)
+        self.tag = Text(str(tag_num), font='Microsoft YaHei').scale(0.5)\
+            .next_to(self.rec, DOWN, buff=MED_SMALL_BUFF)
+        self.add(self.num, self.rec, self.tag)
+
+class oldSequence(VGroup):
+    """This class is forbidden for its fool"""
     def __init__(self, len, width, height):
         super().__init__()
         self.num_list=[]

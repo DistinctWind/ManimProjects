@@ -82,9 +82,9 @@ class RecurrenceFibIntroduction(Scene):
         self.wait()
 
         self.play(title.animate.to_edge(UP).scale(0.75))
-        seq=Sequence(10, 1, 1)
-        self.play(ShowCreation(seq))
-        return super().construct()
+        # seq=Sequence(10, 1, 1)
+        # self.play(ShowCreation(seq))
+        # return super().construct()
 
 class trying1(Scene):
     def construct(self):
@@ -94,9 +94,15 @@ class trying1(Scene):
 
 class trying2(Scene):
     def construct(self):
-        seq=Sequence(10, 1, 1)
-        self.play(ShowCreation(seq))
-        self.play(*seq.activate(3))
-        self.play(*seq.mark(1, 5, 6))
-        self.play(*seq.remark(1, 6))
+        hello = Tex("1")
+        rec = Rectangle()
+        f_always(rec.move_to, hello.get_center)
+        self.play(Write(hello))
+        self.play(ShowCreation(rec))
+        self.play(hello.animate.shift(2*RIGHT+UP))
+
+class trying3(Scene):
+    def construct(self):
+        cell = Cell(1234567890, 7)
+        self.play(ShowCreation(cell))
         return super().construct()
