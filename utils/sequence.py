@@ -9,6 +9,15 @@ class Cell(VGroup):
         self.tag = Text(str(tag_num), font='Microsoft YaHei').scale(0.5)\
             .next_to(self.rec, DOWN, buff=MED_SMALL_BUFF)
         self.add(self.num, self.rec, self.tag)
+    
+    def write(self, n):
+        self.num.target = Tex(str(n))
+        self.rec.target = SurroundingRectangle(self.num.target, buff=MED_SMALL_BUFF)
+        return [
+            MoveToTarget(self.num), 
+            MoveToTarget(self.rec), 
+            self.tag.animate.next_to(self.rec, DOWN, buff=MED_SMALL_BUFF)
+        ]
 
 class oldSequence(VGroup):
     """This class is forbidden for its fool"""

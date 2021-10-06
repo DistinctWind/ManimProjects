@@ -105,4 +105,5 @@ class trying3(Scene):
     def construct(self):
         cell = Cell(1234567890, 7)
         self.play(ShowCreation(cell))
+        self.play(*cell.write(1))
         return super().construct()
