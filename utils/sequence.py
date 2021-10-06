@@ -28,3 +28,15 @@ class Sequence(VGroup):
         ]
         self.active_rec = num
         return animate_list
+    
+    def mark(self, *num, color=YELLOW):
+        animate_list = [
+            self.rec_list[i-1].animate.set_color(color) for i in num
+        ]
+        return animate_list
+    
+    def remark(self, *num):
+        animate_list = [
+            self.rec_list[i-1].animate.set_color(WHITE) for i in num
+        ]
+        return animate_list

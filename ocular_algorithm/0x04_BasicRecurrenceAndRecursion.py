@@ -97,4 +97,6 @@ class trying2(Scene):
         seq=Sequence(10, 1, 1)
         self.play(ShowCreation(seq))
         self.play(*seq.activate(3))
+        self.play(*seq.mark(1, 5, 6))
+        self.play(*seq.remark(1, 6))
         return super().construct()
