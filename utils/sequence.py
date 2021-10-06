@@ -1,3 +1,5 @@
+from math import remainder
+from platform import uname
 from manimlib import *
 
 class Cell(VGroup):
@@ -19,21 +21,50 @@ class Cell(VGroup):
             self.tag.animate.next_to(self.rec, DOWN, buff=MED_SMALL_BUFF)
             ]
 
+def rid(num):
+    """Translate from id to rid"""
+    return num-1
+    
+def id(num):
+    """Translate from rid to id"""
+    return num+1
+
+class NonScene():
+    def play(self, animates):
+        return animates
 class Sequence(VGroup):
     def __init__(self, seq):
         super().__init__()
         self.seq = seq
         self.cells = []
         for num in self.seq:
-            self.cells.append(Cell(num, self.seq.index(num)+1))
-        self.arrow = Arrow(UP*0.75, DOWN*0.75)
+            self.cells.append(Cell(num, id(self.seq.index(num))))
+        self.arrow = Arrow(UP*0.75, DOWN*0.75).set_color(YELLOW)
         self.add(*self.cells)
         self.arrange(RIGHT)
         self.arrow.next_to(self.cells[0], UP)
-
-    def move_arrow(self, num):
-        return self.arrow.animate.next_to(self.cells[num-1], UP)
+        self.active=1
+        self.cells[0].rec.set_color(YELLOW)
     
+    def move_arrow(self, num, scene=NonScene()):
+        return scene.play(self.arrow.animate.next_to(self.cells[rid(num)], UP))
+    
+    def mark(self, num, scene=NonScene()):
+        return scene.play(self.cells[rid(num)].rec.animate.set_color(YELLOW))
+    
+    def unmark(self, num, scene=NonScene()):
+        return scene.play(self.cells[rid(num)].rec.animate.set_color(WHITE))
+    
+    def activate(self, num, scene=NonScene()):
+        return scene.play(
+            self.mark(num),
+            self.unmark(self.active),
+            self.move_arrow(num)
+        )
+    
+    def move_and_update_mark(self, num):
+        pass
+
 class oldSequence(VGroup):
     """This class is forbidden for its fool"""
     def __init__(self, len, width, height):
