@@ -11,7 +11,7 @@ class Sequence(VGroup):
             self.rec_list.append(rec.copy())
             self.rec_num.append(Text(str(i+1)).scale(0.5))
             self.add(self.rec_list[-1], self.rec_num[-1])
-        self.arrange(RIGHT, bauff=0)
+        self.arrange(RIGHT, buff=0)
         self.arrow = Arrow(UP*0.75, DOWN*0.75).next_to(self.rec_list[0], UP).set_color(YELLOW)
         self.add(self.arrow)
         self.active_rec = 1
