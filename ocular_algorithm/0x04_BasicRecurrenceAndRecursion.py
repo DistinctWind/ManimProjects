@@ -102,8 +102,20 @@ class RecurrenceFibIntroduction(Scene):
             seq.activate(pos, self)
             seq.write(pos, seq.get_val(pos-1)+seq.get_val(pos-2), self)
         
+        self.play(*[FadeOut(_mobject) for _mobject in self.mobjects])
         return super().construct()
 
+
+class RecursionFibIntroduction(Scene):
+    def construct(self):
+        title = Text("斐波那契数列", font='DengXian')
+        subtitle = Text("(递归解法）", font='DengXian')
+        subtitle.scale(0.75).next_to(title, DOWN, buff=MED_SMALL_BUFF)
+        self.play(
+            Write(title),
+            Write(subtitle)
+        )
+        return super().construct()
 class trying1(Scene):
     def construct(self):
         tex = Tex("a=1")
