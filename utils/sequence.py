@@ -13,8 +13,8 @@ class Cell(VGroup):
         self.add(self.num, self.rec, self.tag)
     
     def write(self, n):
-        self.num.target = Tex(str(n))
-        self.rec.target = SurroundingRectangle(self.num.target, buff=MED_SMALL_BUFF)
+        self.num.target = Tex(str(n)).move_to(self.num)
+        self.rec.target = SurroundingRectangle(self.num.target, buff=MED_SMALL_BUFF).move_to(self.num.target)
         return [
             MoveToTarget(self.num), 
             MoveToTarget(self.rec), 
@@ -65,47 +65,26 @@ class Sequence(VGroup):
         if animate_list!=None:
             return animate_list
     
-    def move_and_update_mark(self, num):
-        pass
+    def align(self):
+        return [
+            cell_nxt.animate.next_to(cell_lst, RIGHT, buff=MED_SMALL_BUFF)
+            for cell_nxt, cell_lst in zip(self.cells[1:], self.cells[:-1])
+        ]
 
-class oldSequence(VGroup):
-    """This class is forbidden for its fool"""
-    def __init__(self, len, width, height):
-        super().__init__()
-        self.num_list=[]
-        self.rec_list=[]
-        self.rec_num = []
-        rec = Rectangle(width=width, height=height)
-        for i in range(len):
-            self.rec_list.append(rec.copy())
-            self.rec_num.append(Text(str(i+1)).scale(0.5))
-            self.add(self.rec_list[-1], self.rec_num[-1])
-        self.arrange(RIGHT, buff=0)
-        self.arrow = Arrow(UP*0.75, DOWN*0.75).next_to(self.rec_list[0], UP).set_color(YELLOW)
-        self.add(self.arrow)
-        self.active_rec = 1
-        self.rec_list[0].set_color(YELLOW)
-        for i in range(len):
-            self.rec_num[i].next_to(self.rec_list[i], DOWN)
-    
-    def activate(self, num):
-        """This methon return a list of animation"""
-        animate_list = [
-            self.rec_list[self.active_rec-1].animate.set_color(WHITE),
-            self.rec_list[num-1].animate.set_color(YELLOW),
-            self.arrow.animate.next_to(self.rec_list[num-1], UP)
-        ]
-        self.active_rec = num
-        return animate_list
-    
-    def mark(self, *num, color=YELLOW):
-        animate_list = [
-            self.rec_list[i-1].animate.set_color(color) for i in num
-        ]
-        return animate_list
-    
-    def remark(self, *num):
-        animate_list = [
-            self.rec_list[i-1].animate.set_color(WHITE) for i in num
-        ]
-        return animate_list
+    def write(self, pos, num, scene=NonScene()):
+        cell = self.cells[rid(pos)]
+        cell.target = Cell(num, tag_num=pos)
+        if (pos>1):
+            cell.target.next_to(self.cells[rid(pos)-1], buff=MED_SMALL_BUFF)
+        shift_value = cell.target.get_width()-cell.get_width()
+        if (pos==len(self.cells)):
+            return scene.play(MoveToTarget(cell))
+        else:
+            return scene.play(
+                MoveToTarget(cell),
+                *[
+                    lst_cell.animate.shift(shift_value*RIGHT)
+                    for lst_cell in self.cells[rid(pos)+1:]
+                ]
+            )
+        
