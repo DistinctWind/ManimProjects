@@ -1,3 +1,4 @@
+from re import S
 from manimlib import *
 
 import sys
@@ -172,6 +173,91 @@ class trying5(Scene):
 
 class trying6(Scene):
     def construct(self):
-        seq = Sequence([1, 2, 3])
-        tree = CallTree()
+        self.camera.frame.shift(DOWN)
+        seq = Sequence([1, 2, 3]).shift(UP)
+        main_caller = seq.get_cell(3).copy()
+        tree = CallTree(main_caller)
+        
+        self.play(ShowCreation(seq))
+        self.wait()
+        self.play(ShowCreation(tree.depth_bar))
+        self.play(ShowCreation(tree))
+
+        to_caller = seq.get_cell(2).copy()
+        to_caller.next_to(main_caller, DOWN)
+
+        self.play(*tree.extent(main_caller, seq.get_cell(2).copy(), 2))
+        self.play(*tree.compose())
+        self.play(*tree.extent(main_caller, seq.get_cell(1).copy(), 2))
+        self.play(*tree.compose())
+
+        return super().construct()
+
+class trying7(Scene):
+    def construct(self):
+        rec = Rectangle()
+        cir = Circle()
+        rec.to_edge(LEFT)
+        cir.move_to(UP*2, RIGHT*3)
+        self.play(ShowCreation(rec), ShowCreation(cir))
+        self.play(cir.animate.align_to(rec, UP))
+
+        return super().construct()
+
+class trying8(Scene):
+    def construct(self):
+        rec = Rectangle().shift(DOWN)
+        cir = Circle().shift(DOWN).to_edge(RIGHT)
+        self.play(ShowCreation(cir))
+        self.wait()
+        self.play(cir.animate.shift(x_shift(cir)))
+
+        return super().construct()
+
+class trying9(Scene):
+    def construct(self):
+        rec = Rectangle().shift(LEFT*2)
+        cir = Circle().shift(RIGHT*2)
+        arrow = always_redraw(lambda :Arrow(rec.get_right(), cir.get_left()))
+        
+        self.play(ShowCreation(rec), ShowCreation(cir))
+        self.play(GrowArrow(arrow))
+        self.play(rec.animate.shift(UP))
+        self.play(cir.animate.shift(DOWN+RIGHT*2))
+        return super().construct()
+
+class trying10(Scene):
+    def construct(self):
+        seq = Sequence([1, 2, 3, 4, 5]).to_edge(UP)
+        main_caller = seq.get_cell(3).copy()
+        tree = CallTree(main_caller).next_to(seq, DOWN)
+        tree.depth_bar.align_to(seq, UP)
+        
+        self.play(ShowCreation(seq))
+        self.wait()
+        self.play(ShowCreation(tree.depth_bar))
+        self.play(ShowCreation(tree))
+
+        to_caller = seq.get_cell(2).copy()
+        to_caller.next_to(main_caller, DOWN)
+
+        self.play(*tree.extent(main_caller, seq.get_cell(2).copy(), 2))
+        self.play(*tree.compose())
+        self.play(*tree.extent(main_caller, seq.get_cell(1).copy(), 2))
+        self.play(*tree.compose())
+
+        self.play(self.camera.frame.animate.shift(DOWN))
+
+        self.play(*tree.extent(tree.get_cell(2, 1), seq.get_cell(4).copy(), 3))
+        self.play(*tree.compose())
+        self.play(*tree.extent(tree.get_cell(2, 1), seq.get_cell(5).copy(), 3))
+        self.play(*tree.compose())
+
+
+        self.play(*tree.extent(tree.get_cell(2, 2), seq.get_cell(4).copy(), 3))
+        self.play(*tree.compose())
+        self.play(*tree.extent(tree.get_cell(2, 2), seq.get_cell(5).copy(), 3))
+        self.play(*tree.compose())
+        
+
         return super().construct()
