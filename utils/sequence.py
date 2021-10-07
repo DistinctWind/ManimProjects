@@ -37,8 +37,8 @@ class Sequence(VGroup):
         super().__init__()
         self.seq = seq
         self.cells = []
-        for num in self.seq:
-            self.cells.append(Cell(num, id(self.seq.index(num))))
+        for i in range(len(self.seq)):
+            self.cells.append(Cell(self.seq[i], id(i)))
         self.arrow = Arrow(UP*0.75, DOWN*0.75).set_color(YELLOW)
         self.add(*self.cells)
         self.arrange(RIGHT)
