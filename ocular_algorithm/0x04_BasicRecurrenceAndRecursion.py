@@ -83,8 +83,24 @@ class RecurrenceFibIntroduction(Scene):
 
         self.play(title.animate.to_edge(UP).scale(0.75))
 
+        RecurrenceFormula = Tex(
+            r"a_n=\begin{cases}1&{n=1,2,}\\a_{n-1}+a_{n-2}&n\geq3.\end{cases}"
+        ).scale(1.25).shift(UP*.5)
+        GeneralFormula = Tex(
+            r"a_n=\frac{1}{\sqrt{5}}\left[\left(\frac{1+\sqrt{5}}{2}\right)^n-\left(\frac{1-\sqrt{5}}{2}\right)^n\right]"
+        ).next_to(RecurrenceFormula, DOWN, buff=LARGE_BUFF)
+        self.play(Write(RecurrenceFormula), Write(GeneralFormula))
+        self.wait()
+        self.play(FadeOut(RecurrenceFormula), FadeOut(GeneralFormula))
+        self.wait()
+
         seq = Sequence([0 for i in range(10)]).move_to(ORIGIN)
-        self.play(ShowCreation(seq))
+        seq.on_show(self)
+        seq.write(1, 1, self)
+        seq.write(2, 1, self)
+        for pos in range(3, 11):
+            seq.activate(pos, self)
+            seq.write(pos, seq.get_val(pos-1)+seq.get_val(pos-2), self)
         
         return super().construct()
 

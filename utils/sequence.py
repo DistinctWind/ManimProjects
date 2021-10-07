@@ -46,6 +46,9 @@ class Sequence(VGroup):
         self.active=1
         self.cells[0].rec.set_color(YELLOW)
     
+    def on_show(self, scene=NonScene()):
+        return scene.play(ShowCreation(self), GrowArrow(self.arrow))
+
     def move_arrow(self, num, scene=NonScene()):
         return scene.play(self.arrow.animate.next_to(self.cells[rid(num)], UP))
      
@@ -72,8 +75,9 @@ class Sequence(VGroup):
         ]
 
     def write(self, pos, num, scene=NonScene()):
+        self.set_val(pos, num)
         cell = self.cells[rid(pos)]
-        cell.target = Cell(num, tag_num=pos)
+        cell.target = Cell(num, tag_num=pos).move_to(cell)
         if (pos>1):
             cell.target.next_to(self.cells[rid(pos)-1], buff=MED_SMALL_BUFF)
         shift_value = cell.target.get_width()-cell.get_width()
@@ -87,4 +91,9 @@ class Sequence(VGroup):
                     for lst_cell in self.cells[rid(pos)+1:]
                 ]
             )
-        
+    
+    def get_val(self, pos):
+        return self.seq[rid(pos)]
+    
+    def set_val(self, pos, num):
+        self.seq[rid(pos)]=num
