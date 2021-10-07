@@ -113,4 +113,5 @@ class trying4(Scene):
         seq = Sequence([1, 3, 5, 2, 4, 6])
         self.play(ShowCreation(seq), GrowArrow(seq.arrow))
         seq.activate(4, self)
+        seq.activate(6, self)
         return super().construct()

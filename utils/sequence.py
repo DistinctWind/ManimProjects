@@ -48,7 +48,7 @@ class Sequence(VGroup):
     
     def move_arrow(self, num, scene=NonScene()):
         return scene.play(self.arrow.animate.next_to(self.cells[rid(num)], UP))
-    
+     
     def mark(self, num, scene=NonScene()):
         return scene.play(self.cells[rid(num)].rec.animate.set_color(YELLOW))
     
@@ -56,11 +56,14 @@ class Sequence(VGroup):
         return scene.play(self.cells[rid(num)].rec.animate.set_color(WHITE))
     
     def activate(self, num, scene=NonScene()):
-        return scene.play(
+        animate_list = scene.play(
             self.mark(num),
             self.unmark(self.active),
             self.move_arrow(num)
         )
+        self.active=num
+        if animate_list!=None:
+            return animate_list
     
     def move_and_update_mark(self, num):
         pass
