@@ -115,6 +115,19 @@ class RecursionFibIntroduction(Scene):
             Write(title),
             Write(subtitle)
         )
+        self.wait()
+        self.play(
+            FadeOut(title),
+            FadeOut(subtitle)
+        )
+
+        seq = Sequence([1, 1, 0, 0, 0])
+        main_call = seq.cells[rid(5)].copy().next_to(seq, DOWN, buff=MED_LARGE_BUFF)
+
+        self.play(ShowCreation(seq))
+        self.wait()
+        self.play(ShowCreation(main_call))
+        
         return super().construct()
 class trying1(Scene):
     def construct(self):
@@ -148,4 +161,11 @@ class trying4(Scene):
         seq.write(6, 123456, self)
         seq.write(2, 1345, self)
         seq.write(3, 1, self)
+        return super().construct()
+    
+class trying5(Scene):
+    def construct(self):
+        depth_bar = DepthBar()
+        self.play(ShowCreation(depth_bar))
+        self.play(depth_bar.deepen())
         return super().construct()
