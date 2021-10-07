@@ -97,3 +97,47 @@ class Sequence(VGroup):
     
     def set_val(self, pos, num):
         self.seq[rid(pos)]=num
+
+class DepthBar(VGroup):
+    def __init__(self):
+        super().__init__()
+        title = Text("Depth", font='Microsoft YaHei').scale(0.5)
+        self.add(title)
+        self.depth=1
+        
+        self.deep_tag = [Text("1", font='Microsoft YaHei').scale(0.5)]
+        self.add(*self.deep_tag)
+        self.arrange(DOWN)
+    
+    def deepen(self):
+        self.deep_tag.append(Text(str(self.depth+1), font='Microsoft YaHei').scale(0.5).next_to(self.deep_tag[-1], DOWN))
+        self.add(self.deep_tag[-1])
+        self.depth+=1
+        return FadeIn(self.deep_tag[-1], scale=1.5)
+
+class CallTree(VGroup):
+    def __init__(self, main_caller):
+        super().__init__(main_caller)
+        self.depth_bar = DepthBar()
+        self.main_caller = main_caller
+        self.depth_list = [VGroup(main_caller).align_to(self.depth_bar.deep_tag[rid(1)], RIGHT)]
+        self.arrow_group = VGroup()
+        self.add(self.arrow_group)
+    
+    def get_depth_group(self, num):
+        return self.depth_list[rid(num)]
+
+    def extent(self, caller, to_call, to_caller_depth):
+        animate_list = [FadeIn(to_call, scale=1.5)]
+        if to_caller_depth>self.depth_bar.depth:
+            animate_list.append(self.depth_bar.deepen())
+        
+        arrow = always_redraw(Arrow, caller.get_bottom(), to_call.get_top())
+        self.arrow_group.add(arrow)
+        animate_list.append(GrowArrow(arrow))
+
+        return animate_list
+
+        
+        
+

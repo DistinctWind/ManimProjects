@@ -169,3 +169,9 @@ class trying5(Scene):
         self.play(ShowCreation(depth_bar))
         self.play(depth_bar.deepen())
         return super().construct()
+
+class trying6(Scene):
+    def construct(self):
+        seq = Sequence([1, 2, 3])
+        tree = CallTree()
+        return super().construct()
